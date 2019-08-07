@@ -1,0 +1,14 @@
+language: ruby
+sudo: false
+rvm:
+  - 2.2
+branches:
+  only:
+    - master
+script:
+  - gem install bundler
+  - bundle exec jekyll build
+after_success:
+  - openssl aes-256-cbc -K $encrypted_d13b3e314835_key -iv $encrypted_d13b3e314835_iv -in .travis.d/rsa.enc -out .travis.d/rsa -d
+  - chmod 600 ./.travis.d/rsa
+  - rsync -e "ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -o IdentitiesOnly=yes -i '`pwd`/.travis.d/rsa'" --delete -avr _site/ afanasev@lion.cs.ucla.edu:/u/class/spring17/cs118

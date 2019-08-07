@@ -1,0 +1,63 @@
+---
+layout: compress
+---
+<!DOCTYPE html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+  <title>{% if page.title and page.title != '' %}{{ page.title }} - {% endif %}{{ site.title }}</title>
+  <meta name="description" content="{% if page.description %}{{ page.description }}{% else %}{{ site.description }}{% endif %}">
+  <meta name="author" content="{{ site.author }}">
+  <link rel="canonical" href="{{ site.url }}{{ page.url }}">
+  <!-- Le styles -->
+
+  <link rel="stylesheet" href="{{ site.baseurl }}/css/style.css">
+</head>
+<body>
+  <header id="header">
+    <hgroup>
+      <h1 id="site-title">
+        <a class="full" href="{{ site.url }}{{ site.baseurl }}/">{{ site.title }}</a>
+        <a class="hidden-print short" href="{{ site.baseurl }}/">{{ site.short_title }}</a>
+      </h1>
+      {% if site.description %}
+        <h2 id="site-description">{{ site.description }}</h2>
+      {% endif %}
+    </hgroup>
+  </header>
+
+  <nav id="navbar">
+    {% include navbar.html %}
+  </nav>
+
+  <div class="container-fluid">
+    <div class="row-fluid">
+
+      <div id="main" class="col-xs-12 col-sm-12">
+        {{ content }}
+      </div>
+
+    </div><!--/row-->
+  </div> <!-- /container -->
+
+  <hr>
+
+  <footer id="footer">
+    <p>Copyright &copy; {{ site.time | date: "%Y" }}, {{ site.author }}</p>
+  </footer>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+  <script src="{{ site.baseurl }}/js/bootstrap.min.js"></script>
+  <script src="{{ site.baseurl }}/js/site.js"></script>
+  <script>
+   (function(win, doc, script) {
+       {% if site.google_analytics %}
+       // Google Analytics
+       win._gaq=[["_setAccount",'{{ site.google_analytics.account }}'],["_trackPageview"]];
+       add(('https:' == location.protocol ? '//ssl' : '//www') + '.google-analytics.com/ga.js', 'ga');
+       {% endif %}
+   }(window, document, 'script'));
+  </script>
+</body>
+</html>

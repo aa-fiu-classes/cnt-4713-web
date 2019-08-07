@@ -1,0 +1,38 @@
+<nav class="navbar navbar-default">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-navbar-collapse-1">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+
+    <div class="collapse navbar-collapse" id="bs-navbar-collapse-1">
+      <ul class="nav navbar-nav">
+
+{% for node in site.navbar_list %}
+  {% if node.name == page.group %}{% assign active = 'active' %}
+  {% else %}{% assign active = nil %}{% endif %}
+  {% if node.dropdown %}
+          <li class="dropdown {{ active }}">
+            <a class="dropdown-link" href="{{ site.baseurl }}{{ node.link }}">{{ node.name }}</a>
+            <a class="dropdown-toggle" data-toggle="dropdown" href="#">{{ node.name }}<b class="caret"></b></a>
+            <ul class="dropdown-menu">
+    {% for sub in node.dropdown %}
+              <li><a href="{{ site.baseurl }}{{ sub.link }}">{{ sub.name }}</a></li>
+    {% endfor %}
+            </ul>
+          </li>
+  {% else %}
+          <li class="{{ active }}">
+            <a href="{{ site.baseurl }}{{ node.link }}">{{ node.name }}</a>
+          </li>
+  {% endif %}
+{% endfor %}
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
