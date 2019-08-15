@@ -41,7 +41,7 @@ Module organization
 
 ## Required Textbook
 
-- "Computer Networking: A Top-Down Approach (5/6/7th Edition)" by James F. Kurose and Keith W. Ross.
+- "Computer Networking: A Top-Down Approach (7th Edition)" by James F. Kurose and Keith W. Ross.
 
 In addition to the textbook, students expected to do their own research online, using Wikipedia, RFCs, and other technical documentation.  This especially applies to some of the homework problems.
 
