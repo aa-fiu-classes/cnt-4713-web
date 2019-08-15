@@ -38,18 +38,27 @@ navbar_list:
 
 course_info:
   times: 
-  room: Online
+  room: 
   name: Alex Afanasyev
   contact: aa at cs.fiu.edu
   office_hours: by appointment
 
-  homeworks_due: Wednesday of the week following the assignment, 11pm
-  midterm: TBD
+  homeworks:
+    - deadline: Week 2
+    - deadline: Week 3
+    - deadline: Week 5
+    - deadline: Week 6
+    - deadline: Week 8
+    - deadline: Week 11
+    - deadline: Week 13
+    - deadline: Week 15
 
-  final: TBD
+  midterm: Week 16
+
+  final: Week 16
   final_room: 
 
   projects:
-    - deadline: TBD
-    - deadline: TBD
-    - deadline: TBD
+    - deadline: Week 5 (Sep 29, 2019)
+    - deadline: Week 10 (Nov 2, 2019)
+    - deadline: Week 15 (Dec 7, 2019)

@@ -1,18 +1,18 @@
 {% assign course = site.course_info %}
 <div class="col-xs-12 col-sm-6 pull-right figure">
   <table class="table table-striped table-hover table-bordered">
-    <tr>
-      <td><b>Lectures</b></td>
-      <td>{{ course.times }} <b>{{ course.room }}</b></td>
-    </tr>
-    <tr>
-      <td><b>Discussion Sections</b></td>
-      <td>
-        {% for section in course.sections %}
-          DIS {{ forloop.index }}: {{ section.times }}, <b>{{ section.room }}</b><br/><ul><li>({{ section.name }}, {{ section.contact }})</li></ul>
-        {% endfor %}
-      </td>
-    </tr>
+    <!-- <tr>
+         <td><b>Lectures</b></td>
+         <td>{{ course.times }} <b>{{ course.room }}</b></td>
+         </tr> -->
+    <!-- <tr>
+         <td><b>Discussion Sections</b></td>
+         <td>
+         {% for section in course.sections %}
+         DIS {{ forloop.index }}: {{ section.times }}, <b>{{ section.room }}</b><br/><ul><li>({{ section.name }}, {{ section.contact }})</li></ul>
+         {% endfor %}
+         </td>
+         </tr> -->
     <tr>
       <td><b>Instructor</b></td>
       <td>
@@ -23,14 +23,14 @@
       <td><b>Office hours</b></td>
       <td>{{ course.office_hours }}</td>
     </tr>
-    <tr>
-      <td><b>TA Office Hours</b></td>
-      <td>
-        {% for section in course.sections %}
-          DIS {{ forloop.index }} ({{ section.name }}): {{ section.office_hours }}<br/>
-        {% endfor %}
-      </td>
-    </tr>
+    <!-- <tr>
+         <td><b>TA Office Hours</b></td>
+         <td>
+         {% for section in course.sections %}
+         DIS {{ forloop.index }} ({{ section.name }}): {{ section.office_hours }}<br/>
+         {% endfor %}
+         </td>
+         </tr> -->
     <tr>
       <td><b>Midterm</b></td>
       <td>{{ course.midterm }}, <b>{{ course.room }}</b></td>
@@ -39,15 +39,39 @@
       <td><b>Final</b></td>
       <td>{{ course.final }}, <b>{{ course.final_room }}</b></td>
     </tr>
-    <tr>
-      <td><b>Homeworks due</b></td>
-      <td>{{ course.homeworks_due }}</td>
-    </tr>
-    {% for project in course.projects %}
+    <!-- <tr>
+         <td><b>Homeworks due</b></td>
+         <td>{{ course.homeworks_due }}</td>
+         </tr> -->
+    {% if course.homeworks %}
       <tr>
-        <td><b>Project {{ forloop.index }} due</b></td>
-        <td>{{ project.deadline }}</td>
+        <td>Homeworks</td>
+        <td>
+          <table class="table table-striped table-hover table-bordered">
+            {% for project in course.homeworks %}
+              <tr>
+                <td><b>Homework {{ forloop.index }} due</b></td>
+                <td>{{ project.deadline }}</td>
+              </tr>
+            {% endfor %}
+          </table>
+        </td>
       </tr>
-    {% endfor %}
+    {% endif %}  
+    {% if course.projects %}
+      <tr>
+        <td>Projects</td>
+        <td>
+          <table class="table table-striped table-hover table-bordered">
+            {% for project in course.projects %}
+              <tr>
+                <td><b>Project {{ forloop.index }} due</b></td>
+                <td>{{ project.deadline }}</td>
+              </tr>
+            {% endfor %}
+          </table>
+        </td>
+      </tr>
+    {% endif %}
   </table>
 </div>
