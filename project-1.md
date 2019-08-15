@@ -9,27 +9,22 @@ group: "Project 1"
 
 ## Revisions
 
-- <span class="label label-info">Update April 16, 2017</span>
-
-    * Test 8 and 9 reduced by 5 pts (eliminated second sub-test)
-    * Test 11 and 12 increased by 5 pts (weight of second sub-test doubled)
-    * Added grading/testing hint
+- None currently
 
 ## Overview
 
 In this project, you will need to implement a simple client-server application that transfers a file over a TCP connection.
 
-All implementations should be written in C++ using [BSD sockets](http://en.wikipedia.org/wiki/Berkeley_sockets).
-**No high-level network-layer abstractions (like Boost.Asio or similar) are allowed in this project.**
-You are allowed to use some high-level abstractions, including C++11 extensions, for parts that are not directly related to networking, such as string parsing, multi-threading.
-We will also accept implementations written in C, however use of C++ is preferred.
+All implementations should be written in Python [BSD sockets](http://en.wikipedia.org/wiki/Berkeley_sockets).
+**No high-level network-layer abstractions are allowed in this project.**
+You are allowed to use some high-level abstractions for parts that are not directly related to networking, such as string parsing, multi-threading.
 
 The objective of this project is to learn basic operations of BSD sockets, understand implications of using the API, as well as to discover common pitfalls when working with network operations.
 
 You are required to use `git` to track the progress of your work. **The project can receive a full grade only if the submission includes git history no shorter than 3 commits.**
 
-You are encouraged to host your code in private repositories on [GitHub](https://github.com/), [GitLab](https://gitlab.com), or other places.  At the same time, you are PROHIBITED to make your code for the class project public during the class or any time after the class.  If you do so, you will be violating academic honestly policy that you have signed, as well as the student code of conduct and be subject to serious sanctions.
-{: class="alert alert-danger"}
+Note: You are encouraged to host your code in private repositories on [GitHub](https://github.com/), [GitLab](https://gitlab.com), or other places.  At the same time, you are PROHIBITED to make your code for the class project public during the class or any time after the class.  If you do so, you will be violating academic honestly policy that you have signed, as well as the student code of conduct and be subject to serious sanctions.
+{: class="alert alert-warning"}
 
 ## Task Description
 
@@ -40,22 +35,22 @@ The project contains two parts: a server and a client.
 
 ### Server Application Specification
 
-The server application MUST be compiled into `server` binary, accepting two command-line arguments:
+The server application MUST be implemented in `server.py` Python file, accepting two command-line arguments:
 
-    $ server <PORT> <FILE-DIR>
+    $ ./server.py <PORT> <FILE-DIR>
 
 - `<PORT>`: port number on which server will listen on connections.  The server must accept connections coming from any interface.
 - `<FILE-DIR>`: directory name where to save the received files.
 
 For example, the command below should start the server listening on port `5000` and saving received files in the directory `/save`.
 
-    $ ./server 5000 /save
+    $ ./server.py 5000 /save
 
 **Requirements**:
 
-- The server must open a listening socket on the specified port number
+- The server must open a listening socket on the specified in the command line port number
 
-- The server should gracefully process incorrect port number and exit with a non-zero error code (you can assume that the folder is always correct).  In addition to exit, the server must print out on standard error (`std::cerr`) an error message that starts with `ERROR:` string.
+- The server should gracefully process an incorrect port number and exit with a non-zero error code (you can assume that the folder is always correct).  In addition to exit, the server must print out on standard error (using `sys.stderr.write()`) an error message that starts with `ERROR:` string.
 
 - The server should exit with code zero when receiving `SIGQUIT`/`SIGTERM` signal
 
@@ -63,15 +58,15 @@ For example, the command below should start the server listening on port `5000` 
 
 - The server must count all established connections (1 for the first connect, 2 for the second, etc.).  The received file over the connection must be saved to `<FILE-DIR>/<CONNECTION-ID>.file` file  (e.g., `/save/1.file`, `/save/2.file`, etc.).  If the client doesn't send any data during gracefully terminated TCP connection, the server should create an empty file with the name that corresponds to the connection number.
 
-- The server must assume error if no data received from the client for over `10 seconds`.  It should abort the connection and write a single `ERROR` string (without end-of-line/carret-return symbol) into the corresponding file.  Note that any partial input must be discarded.
+- The server must assume an error if no data received from the client for over `10 seconds`.  It should abort the connection and write a single `ERROR` string (without end-of-line/carret-return symbol) into the corresponding file.  Note that any partial input must be discarded.
 
 - The server should be able to accept and save files up to `100 MiB`
 
 ### Client Application Specification
 
-The client application MUST be compiled into `client` binary, accepting three command-line arguments:
+The client application MUST be implemented in `client.py` file, accepting three command-line arguments:
 
-    $ ./client <HOSTNAME-OR-IP> <PORT> <FILENAME>
+    $ ./client.py <HOSTNAME-OR-IP> <PORT> <FILENAME>
 
 - `<HOSTNAME-OR-IP>`: hostname or IP address of the server to connect
 - `<PORT>`: port number of the server to connect
@@ -79,13 +74,13 @@ The client application MUST be compiled into `client` binary, accepting three co
 
 For example, the command below should result in connection to a server on the same machine listening on port 5000 and transfer content of `file.txt`:
 
-    $ ./client localhost 5000 file.txt
+    $ ./client.py localhost 5000 file.txt
 
 **Requirements**:
 
 - The client must be able to connect to the specified server and port, transfer the specified file, and gracefully terminate the connection.
 
-- The client should gracefully process incorrect hostname and port number and exist with a non-zero exit code (you can assume that the specified file is always correct).  In addition to exit, the client must print out on standard error (`std::cerr`) an error message that starts with `ERROR:` string.
+- The client should gracefully process incorrect hostname and port number and exist with a non-zero exit code (you can assume that the specified file is always correct).  In addition to exit, the client must print out on standard error (using `sys.stderr.write()`) an error message that starts with `ERROR:` string.
 
 - Client application should exit with code zero after successful transfer of the file to server.  It should support transfer of files that are up to 100 MiB file.
 
@@ -94,7 +89,7 @@ For example, the command below should result in connection to a server on the sa
     * Timeout to connect to server should be no longer than `10 seconds`
     * Timeout for not being able to send more data to server (not being able to write to send buffer) should be no longer than `10 seconds`.
 
-    Whenever timeout occurs, the client should abort the connection, print an error string starting with `ERROR:` to standard error (`std::cerr`), and exit with non-zero code.
+    Whenever timeout occurs, the client should abort the connection, print an error string starting with `ERROR:` to standard error (using `sys.stderr.write()`), and exit with non-zero code.
 
 ## A Few Hints
 
@@ -112,16 +107,6 @@ Here are some hints of using multi-thread techniques to implement the server.
 
 *  Once you accept a new connection, create a child thread for the new connection.
    * Is the new connection using the same socket as the one used by the main thread?
-
-Here are some sample codes:
-
-* A simple server that echoes back anything sent by the client: [server.cpp]({{ site.baseurl }}/hints/server.cpp), [client.cpp]({{ site.baseurl }}/hints/client.cpp)
-
-* A simple multi-thread countdown: [multi-thread.cpp]({{ site.baseurl }}/hints/multi-thread.cpp)
-
-Other resources
-
-* [Guide to Network Programming Using Sockets](http://beej.us/guide/bgnet/)
 
 ## Environment Setup
 
@@ -141,8 +126,8 @@ You can easily create an image in your favourite virtualization engine (VirtualB
 
   * Clone project template
 
-        git clone https://github.com/cs118/spring17-project1 ~/cs118-proj1
-        cd ~/cs118-proj1
+        git clone https://github.com/aa-classes/fall19-project1 ~/cnt4713-proj1
+        cd ~/cnt4713-proj1
 
   * Initialize VM
 
@@ -159,7 +144,7 @@ You can easily create an image in your favourite virtualization engine (VirtualB
 
 - Work on your project
 
-  All files in `~/cs118-proj1` folder on the host machine will be automatically synchronized with `/vagrant` folder on the virtual machine.  For example, to compile your code, you can run the following commands:
+  All files in `~/cnt4713-proj1` folder on the host machine will be automatically synchronized with `/vagrant` folder on the virtual machine.  For example, to compile your code, you can run the following commands:
 
         vagrant ssh
         cd /vagrant
@@ -171,14 +156,7 @@ You can easily create an image in your favourite virtualization engine (VirtualB
 
 * If you are using Windows, read [this article](http://www.sitepoint.com/getting-started-vagrant-windows/) to help yourself set up the environment.
 
-* The code base contains the basic `Makefile` and two empty files `server.cpp` and `client.cpp`.
-
-        $ vagrant ssh
-        vagrant@vagrant:~$ cd /vagrant
-        vagrant@vagrant:/vagrant$ ls -a
-        .  ..  client  client.cpp  .git  .gitignore  Makefile  README.md  server  server.cpp  .vagrant  Vagrantfile
-
-* You are now free to add more files and modify the Makefile to make the `server` and `client` full-fledged implementation.
+* You are now free to add more files and modify the Makefile to make the `server.py` and `client.py` full-fledged implementation.
 
 ## Submission Requirements
 
@@ -186,17 +164,15 @@ To submit your project, you need to prepare:
 
 1. A `README.md` file placed in your code that includes:
 
-    * Your name, UCLA ID
+    * Your name, Panther ID
     * The high level design of your server and client
     * The problems you ran into and how you solved the problems
-    * List of any additional libraries used
+    * List of any additional python modules used
     * Acknowledgement of any online tutorials or code example (except class website) you have been using.
 
-    **If you need additional dependencies for your project, you must update Vagrant file.**
+1. All your source code, `README.md`, `Vagrantfile`, and `.git` folder with your git repository history as a `.tar.gz` archive (and any files from extra credit part).
 
-1. All your source code, `Makefile`, `README.md`, `Vagrantfile`, and `.git` folder with your git repository history as a `.tar.gz` archive (and any files from extra credit part).
-
-    To create the submission, **use the provided Makefile** in the skeleton project.  Just update `Makefile` to include your UCLA ID and then just type
+    To create the submission, **use the provided Makefile** in the skeleton project.  Just update `Makefile` to include your Panther ID and then just type
 
         make tarball
 
@@ -204,12 +180,11 @@ To submit your project, you need to prepare:
 
 Before submission, please make sure:
 
-1. Your code compiles
-2. Client and server conforms to the specification
-3. `.tar.gz` archive does not contain temporary or other unnecessary files.  We will automatically deduct points otherwise.
+1. Client and server conforms to the specification
+1. `.tar.gz` archive does not contain temporary or other unnecessary files.  We will automatically deduct points otherwise.
 
 Submissions that do not follow these requirements will not get any credit.
-{: class="bs-callout bs-callout-danger" }
+{: class="bs-callout bs-callout-warning" }
 
 ## Grading
 
@@ -254,7 +229,7 @@ We may test your server against a "standard" implementation of the client, your 
 
 ### Deductions
 
-1. (-5 pts) The submission archive contains temporary or other non-source code file, except `README.md`, `Vagrantfile`, files under `.git` subfolder (and any files from extra credit part).
+1. (-5 pts) The submission archive contains temporary or other non-source code file, except `README.md`, `Vagrantfile`, files under `.git` subfolder.
 
 ### Extra Credit
 

@@ -10,29 +10,23 @@ group: "Project 2"
 
 **Revisions**
 
-- April 6, 2017: Corrected the `tc` command to reorder packets.
-
-- <span class="label label-primary">May 17, 2017</span>
-  Header encoding must be in **network order**
-
-  Client application should send payload of the maximum segment size (average payload size must be over 500 bytes)
+- None currently
 
 ## Overview
 
 In this project you will need to implement `Confundo`, a basic version of reliable data transfer protocol, including connection establishment and congestion control.
 You will implement Confundo protocol in context of server and client applications, where client transmits a file as soon as the connection is established (same as in project 1).
 
-All implementations should be written in C++ using [BSD sockets](http://en.wikipedia.org/wiki/Berkeley_sockets).
-**No high-level network-layer abstractions (like Boost.Asio or similar) are allowed in this project.**
-You are allowed to use some high-level abstractions, including C++11 extensions, for parts that are not directly related to networking, such as string parsing, multi-threading.
-We will also accept implementations written in C, however use of C++ is preferred.
+All implementations should be written in Python [BSD sockets](http://en.wikipedia.org/wiki/Berkeley_sockets).
+**No high-level network-layer abstractions are allowed in this project.**
+You are allowed to use some high-level abstractions for parts that are not directly related to networking, such as string parsing, multi-threading.
 
 The objective of this project is to deepen your understanding on how TCP protocol works and specifically how it handles packet losses and reordering.
 
 You are required to use `git` to track the progress of your work. **The project can receive a full grade only if the submission includes git history no shorter than 3 commits FROM ALL PARTICIPANTS OF YOUR GROUP.**  If commit history includes commits made only by one group member, other group members will receive **no credit**.
 
 You are encouraged to host your code in private repositories on [GitHub](https://github.com/), [GitLab](https://gitlab.com), or other places.  At the same time, you are PROHIBITED to make your code for the class project public during the class or any time after the class.  If you do so, you will be violating academic honestly policy that you have signed, as well as the student code of conduct and be subject to serious sanctions.
-{: class="alert alert-danger"}
+{: class="alert alert-warning"}
 
 ## Task Description
 
@@ -99,22 +93,22 @@ Both client and server must implement reliable data transfer using unreliable UD
 
 ### Server Application Specification
 
-The server application MUST be compiled into `server` binary, accepting two command-line arguments:
+The server application MUST be written in `server.py` file (you can create additional `.py` files and modules), accepting two command-line arguments:
 
-    $ server <PORT> <FILE-DIR>
+    $ ./server.py <PORT> <FILE-DIR>
 
 - `<PORT>`: port number on which server will "listen" on connections (expects UDP packets to be received).  The server must accept connections coming from any interface.
 - `<FILE-DIR>`: directory name where to save the received files.
 
 For example, the command below should start the server listening on port `5000` and saving received files in the directory `/save`.
 
-    $ ./server 5000 /save
+    $ ./server.py 5000 /save
 
 **Requirements**
 
 - The server must open a UDP socket on the specified port number
 
-- The server should gracefully process incorrect port number and exit with a non-zero error code (you can assume that the folder is always correct).  In addition to exit, the server must print out on standard error (`std::cerr`) an error message that starts with `ERROR:` string.
+- The server should gracefully process incorrect port number and exit with a non-zero error code (you can assume that the folder is always correct).  In addition to exit, the server must print out on standard error (using `sys.stderr.write()`) an error message that starts with `ERROR:` string.
 
 - The server should exit with code zero when receiving `SIGQUIT`/`SIGTERM` signal
 
@@ -160,15 +154,15 @@ For example, the command below should start the server listening on port `5000` 
                 |                                       ...                                   ...
                 |                                        |                                     |
 
-- The server must assume error if no data received from the client for over 10 seconds.  It should abort the connection and write a single `ERROR` string into the corresponding file.
+- The server must assume an error if no data is received from the client for over 10 seconds.  It should abort the connection and write a single `ERROR` string into the corresponding file.
 
 - The server should be able to accept and save files up to 100 MiB
 
 ### Client Application Specification
 
-The client application MUST be compiled into `client` binary, accepting three command-line arguments:
+The client application MUST be written in `client.py` file (you are allowed to create other `.py` files and modules), accepting three command-line arguments:
 
-    $ ./client <HOSTNAME-OR-IP> <PORT> <FILENAME>
+    $ ./client.py <HOSTNAME-OR-IP> <PORT> <FILENAME>
 
 - `<HOSTNAME-OR-IP>`: hostname or IP address of the server to connect (send UDP datagrams)
 - `<PORT>`: port number of the server to connect (send UDP datagrams)
@@ -176,7 +170,7 @@ The client application MUST be compiled into `client` binary, accepting three co
 
 For example, the command below should result in connection to a server on the same machine listening on port 5000 and transfer content of `file.txt`:
 
-    $ ./client localhost 5000 file.txt
+    $ ./client.py localhost 5000 file.txt
 
 **Requirements**:
 
@@ -188,7 +182,7 @@ For example, the command below should result in connection to a server on the sa
 
   * Send UDP packet with `ACK` flag including the first part of the specified file.
 
-- The client should gracefully process incorrect hostname and port number and exist with a non-zero exit code (you can assume that the specified file is always correct).  In addition to exit, the client must print out on standard error (`std::cerr`) an error message that starts with `ERROR:` string.
+- The client should gracefully process incorrect hostname and port number and exist with a non-zero exit code (you can assume that the specified file is always correct).  In addition to exit, the client must print out on standard error (using `sys.stderr.write()`) an error message that starts with `ERROR:` string.
 
 - After file is successfully transferred file (all bytes acknowledged), the client should gracefully terminate the connection
 
@@ -257,7 +251,7 @@ Client and server (mostly client) is required to implement TCP Tahoe congestion 
 
 ### Common Requirements
 
-- The following output MUST be written to standard output (`std::cout`) in the **exact format defined**.  You will get no credit if the format is not followed exactly and our test script cannot automatically parse it.  If any other information needs to be shown, it MUST be written to standard error (`std::cerr`)
+- The following output MUST be written to the standard output (using `print()`) in the **exact format defined**.  You will get no credit if the format is not followed exactly and our test script cannot automatically parse it.  If any other information needs to be shown, it MUST be written to the standard error (using `sys.stderr.write()`)
 
   * Packet received:
 
@@ -293,10 +287,10 @@ and so on.
 
 Checklist:
 
-- Are your cout statements correct? You should not have any other `std::cout` statements besides the one in the spec, they should be in the right format, printed at the right time with the right optional outputs, and with the correct `cwnd` and `ssthresh` values.
+- Are your cout statements correct? You should not have any other `print()` or `sys.stdout.write()` statements besides the one in the spec, they should be in the right format, printed at the right time with the right optional outputs, and with the correct `cwnd` and `ssthresh` values.
 
-    - No other cout statements, others should be to `std::cerr`
-    - `std::cout` statements are in the exact correct format
+    - No other cout statements, others should be usig `sys.stderr.write()`
+    - `print()` statements are in the exact correct format
     - You are adding in the `[ACK]` `[SYN]` `[FIN]` `[DUP]` optional output correctly. DUP in particular is easy to miss.
     - Are you printing a statement every time you should be? Is there a case where you receive something but don't print it, etc.
 
@@ -322,7 +316,7 @@ This error is especially baffling because it can sometimes occur for some test c
 
 ### Emulating packet loss
 
-If are using the [Vagrantfile provided in project-2 skeleton](https://github.com/cs118/spring17-project2), you can automatically instantiate two virtual machines that are connected to each other using a private network (`enp0s8` interface on each).  You can also run preinstalled `/set-loss.sh` script to enable emulation of 10% loss and delay of 20ms in each direction (need to run on each VM separately).
+If are using the [Vagrantfile provided in project-2 skeleton](https://github.com/aa-classes/fall19-project2), you can automatically instantiate two virtual machines that are connected to each other using a private network (`enp0s8` interface on each).  You can also run preinstalled `/set-loss.sh` script to enable emulation of 10% loss and delay of 20ms in each direction (need to run on each VM separately).
 
 You can use the following commands to adjust parameters of the emulation:
 
@@ -369,10 +363,10 @@ You can easily create an image in your favourite virtualization engine (VirtualB
 
 - Set up project and VM instances
 
-  * Clone [project template](https://github.com/cawka/spring17-cs118-project2)
+  * Clone project template
 
-        git clone https://github.com/cs118/spring17-project2 ~/cs118-proj2
-        cd ~/cs118-proj2
+        git clone https://github.com/aa-classes/fall19-project2 ~/cnt4713-proj2
+        cd ~/cnt4713-proj2
 
   * Initialize VMs, one to run the client app and the other to run the server app
 
@@ -419,14 +413,14 @@ You can easily create an image in your favourite virtualization engine (VirtualB
 
 * If you are using Windows, read [this article](http://www.sitepoint.com/getting-started-vagrant-windows/) to help yourself set up the environment.
 
-* The code base contains the basic `Makefile` and two empty files `server.cpp` and `client.cpp`.
+* The code base contains the basic `Makefile` and two empty files `server.py` and `client.py`.
 
         $ vagrant ssh
         vagrant@client:~$ cd /vagrant
         vagrant@client:/vagrant$ ls -a
-        .  ..  client.cpp  confundo.lua  .gitignore  Makefile  README.md  server.cpp  .vagrant  Vagrantfile
+        .  ..  client.py  confundo.lua  .gitignore  Makefile  README.md  server.py  .vagrant  Vagrantfile
 
-* You are now free to add more files and modify the Makefile to make the `server` and `client` full-fledged implementation.
+* You are now free to add more files and modify the Makefile to make the `server.py` and `client.py` full-fledged implementation.
 
 ## Submission Requirements
 
@@ -448,7 +442,7 @@ To submit your project, you need to prepare:
 
 1. All your source code, `Makefile`, `README.md`, `Vagrantfile`, `confundo.lua`, and `.git` folder with your git repository history as a `.tar.gz` archive (and any files from extra credit part).
 
-    To create the submission, **use the provided Makefile** in the skeleton project.  Just update `Makefile` to include your UCLA ID and then just type
+    To create the submission, **use the provided Makefile** in the skeleton project.  Just update `Makefile` to include your Panther ID and then just type
 
         make tarball
 
@@ -456,12 +450,11 @@ To submit your project, you need to prepare:
 
 Before submission, please make sure:
 
-1. Your code compiles
-2. Client and server conforms to the specification
-3. `.tar.gz` archive does not contain temporary or other unnecessary files.  We will automatically deduct points otherwise.
+1. Client and server conforms to the specification
+2. `.tar.gz` archive does not contain temporary or other unnecessary files.  We will automatically deduct points otherwise.
 
 Submissions that do not follow these requirements will not get any credit.
-{: class="bs-callout bs-callout-danger" }
+{: class="bs-callout bs-callout-warning" }
 
 ## Grading
 
@@ -540,9 +533,3 @@ We may test your server against a "standard" implementation of the client, your 
     * We will use `tc` command with loss and delay to generate the lossy and large delay network
     * Test need to pass under different packet delays (50 ms ~ 100 ms) and packet loss rates (1% ~ 10%)
     * We will not test timeout on the server side
-
-<!-- ###  Bonus points -->
-
-<!-- You can have: -->
-
-<!-- * 1 extra point if you implement RTT estimation and adaptive RTO, as defined in TCP specification -->

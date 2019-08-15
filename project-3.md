@@ -15,12 +15,14 @@ group: "Project 3"
 
 In this project, you will be writing a simple router with a static routing table. Your router will receive raw Ethernet frames and process them just like a real router: forward them to the correct outgoing interface, create new frames, etc.  The starter code will provide the framework to receive Ethernet frames; your job is to create the forwarding logic.
 
-You are allowed to use some high-level abstractions, including C++11 extensions, for parts that are not directly related to networking, such as string parsing, multi-threading, etc.
+All implementations should be written in Python [BSD sockets](http://en.wikipedia.org/wiki/Berkeley_sockets).
+**No high-level network-layer abstractions are allowed in this project.**
+You are allowed to use some high-level abstractions for parts that are not directly related to networking, such as string parsing, multi-threading.
 
 You are required to use `git` to track the progress of your work. **The project can receive a full grade only if the submission includes git history no shorter than 3 commits FROM ALL PARTICIPANTS OF YOUR GROUP.**  If commit history includes commits made only by one group member, other group members will receive **no credit**.
 
 You are encouraged to host your code in private repositories on [GitHub](https://github.com/), [GitLab](https://gitlab.com), or other places.  At the same time, you are PROHIBITED to make your code for the class project public during the class or any time after the class.  If you do so, you will be violating academic honestly policy that you have signed, as well as the student code of conduct and be subject to serious sanctions.
-{: class="alert alert-danger"}
+{: class="alert alert-warning"}
 
 </div>
 </div>
@@ -112,9 +114,9 @@ If your router is functioning correctly, all of the following operations should 
 - Transferring file from client to server(s) using the code from your project 1 or 2. Notice that outputs need to be redirected into files; otherwise, the client or server(s) may stop responding.
 
     ```bash
-    mininet> server1 /path/to/your/server 5000 /folder/to/save > server1Output &
+    mininet> server1 /path/to/your/server.py 5000 /folder/to/save > server1Output &
     ...
-    mininet> client /path/to/your/client 192.168.2.2 5000 /file/to/transfer > clientOutput &
+    mininet> client /path/to/your/client.py 192.168.2.2 5000 /file/to/transfer > clientOutput &
     ...
     ```
 
@@ -149,9 +151,19 @@ Note that actual Ethernet frame also includes a 32-bit Cyclical Redundancy Check
     * `0x0806` (ARP)
     * `0x0800` (IPv4)
 
-For your convenience, the starter code defines Ethernet header as an `ethernet_hdr` structure in `core/protocol.hpp`:
+{% comment %}
 
-```c++
+For your convenience, the starter code defines Ethernet header as an `ethernet_hdr` structure in `core/protocol.py`:
+
+```python
+class ethernet_hdr:
+  ether_dhost
+  ether_dhost
+  ether_type
+
+  @static_method
+
+
 struct ethernet_hdr
 {
   uint8_t  ether_dhost[ETHER_ADDR_LEN]; /* destination ethernet address */
@@ -159,6 +171,8 @@ struct ethernet_hdr
   uint16_t ether_type;                  /* packet type ID */
 } __attribute__ ((packed)) ;
 ```
+
+{% endcomment %}
 
 **Requirements**
 
@@ -211,6 +225,8 @@ Note that ARP requests are sent to the broadcast MAC address (`FF:FF:FF:FF:FF:FF
 
 * `Prot addr len`: number of octets in the requested network address. IPv4 has 4-octet addresses, so 0x04.
 
+{% comment %}
+
 For your convenience, the starter code defines the ARP header as an `arp_hdr` structure in `core/protocol.hpp`:
 
 ```c++
@@ -228,6 +244,8 @@ struct arp_hdr
 } __attribute__ ((packed)) ;
 ```
 
+{% endcomment %}
+
 **Requirements**
 
 - Your router must properly process incoming ARP requests and replies:
@@ -243,8 +261,6 @@ struct arp_hdr
 - When router receives an ARP reply, it should record IP-MAC mapping information in ARP cache (Source IP/Source hardware address in the ARP reply).  Afterwards, the router should send out all corresponding enqueued packets.
 
   <span class="label label-warning">Note</span> Your implementation should not save IP-MAC mapping based on any other messages, only from ARP replies!
-
-  <del>Your implementation can also record mapping from ARP requests using source IP and hardware address, but it is not required in this project.</del>
 
 - To reduce staleness of the ARP information, entries in ARP cache should time out after `30 seconds`.  The starter code (`ArpCache` class) already includes the facility to mark ARP entries "invalid".  Your task is to remove such entries.  If there is an ongoing traffic (e.g., client still pinging the server), then the router should go through the standard mechanism to send ARP request and then cache the response.  If there is no ongoing traffic, then ARP cache should eventually become empty.
 
@@ -282,6 +298,8 @@ struct arp_hdr
         +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
 
+{% comment %}
+
 For your convenience, the starter code defines the IPv4 header as an `ip_hdr` structure in `core/protocol.hpp`:
 
 ```c++
@@ -299,6 +317,8 @@ struct ip_hdr
   uint32_t ip_src, ip_dst;         /* source and dest address */
 } __attribute__ ((packed));
 ```
+
+{% endcomment %}
 
 **Requirements**
 
@@ -375,6 +395,8 @@ When an ICMP message is composed by a router, the source address field of the in
 
 Note that `Time Exceeded` message is needed for `traceroute` to work properly.
 
+{% comment %}
+
 For your convenience, the starter code defines the ICMP header as an `icmp_hdr` structure in `core/protocol.hpp`:
 
 ```c++
@@ -385,7 +407,9 @@ struct icmp_hdr {
 } __attribute__ ((packed));
 ```
 
-You may want to create additional structs for ICMP messages, but make sure to use the packed attribute so that the compiler doesn't try to align the fields in the struct to word boundaries (i.e., must use `__attribute__ ((packed))` annotation).
+{% endcomment %}
+
+You may want to create additional structs for ICMP messages, but make sure to use the proper packing/unpacking methods.
 
 **Requirements**
 
@@ -419,8 +443,8 @@ For this project you should use the provided Vagrant environment, as it installs
 1. Clone project template
 
     ```bash
-    git clone https://github.com/cs118/spring17-project3 ~/cs118-proj3
-    cd ~/cs118-proj3
+    git clone https://github.com/aa-classes/fall19-project3 ~/cnt4713-proj3
+    cd ~/cnt4713-proj3
     ```
 
 2. Initialize VM
@@ -508,10 +532,10 @@ Apr 09 19:57:48 vagrant pox.py[8879]: INFO:core:POX 0.5.0 (eel) is up.
 
 Here is the overal structure of the starter code:
 
-                        simple-router.hpp
-                        +--------------+            core/protocol.hpp
+                        simple_router.py
+                        +--------------+            core/protocol.py
                         |              |
-                        | SimpleRouter |            core/utils.hpp
+                        | SimpleRouter |            core/utils.py
                         |              |
                         +---+-----+----+
              m_arp        1 | 1|  | 1       m_ifaces
@@ -519,14 +543,14 @@ Here is the overal structure of the starter code:
            |                   |                     |
            |                   |m_routingTable       |
            |                   |                     |
-           |1                  |1                    | N (std::set)
+           |1                  |1                    | N (dictionary)
            v                   v                     v
     +------+-----+      +------+-------+       +-----+-----+
     |            |      |              |       |           |
     |  ArpCache  |      | RoutingTable |       | Interface |
     |            |      |              |       |           |
     +------------+      +--------------+       +-----------+
-     arp-cache.hpp      routing-table.hpp    core/interface.hpp
+     arp_cache.py      routing_table.py      core/interface.py
 
 - `SimpleRouter`
 
@@ -536,13 +560,15 @@ Here is the overal structure of the starter code:
 
     Class containing information about router's interface, including router interface name (`name`), hardware address (`addr`), and IPv4 address (`ip`).
 
-- `RoutingTable` (`routing-table.hpp|cpp`)
+- `RoutingTable` (`routing_table.py`)
 
     Class implementing a simple routing table for your router.  The content is automatically loaded from a text file with default filename is `RTABLE` (name can be changed using `RoutingTable` option in `router.config` config file)
 
-- `ArpCache` (`arp-cache.hpp|cpp`)
+- `ArpCache` (`arp_cache.py`)
 
     Class for handling ARP entries and pending ARP requests.
+
+{% comment %}
 
 ### Key Methods
 
@@ -607,6 +633,8 @@ We have provided you with some basic debugging functions in `core/utils.hpp` (`c
 
     Print out a formatted IP address from a `uint32_t` or `in_addr`. Make sure you are passing the IP address in the correct byte ordering
 
+{% endcomment %}
+
 ### Logging Packets
 
 You can use Mininet to monitor traffic that goes in
@@ -633,7 +661,7 @@ $ sudo tcpdump -n -i server1-eth0
 
 **This assignment is considerably hard, so get started early, not as many of you did for project 2.**
 
-In our reference solution, we added less than 520 lines of C/C++ code, including whitespace and comments.
+In our reference solution, we added less than 520 lines of Python code, including whitespace and comments.
 Of course, your solution may need fewer or more lines of code, but this gives you a rough idea of the size of the assignment to a first approximation.
 
 ## A Few Hints
@@ -671,7 +699,7 @@ To submit your project, you need to prepare:
 
 1. All your source code, `Makefile`, `README.md`, `Vagrantfile`, `confundo.lua`, and `.git` folder with your git repository history as a `.tar.gz` archive (and any files from extra credit part).
 
-    To create the submission, **use the provided Makefile** in the starter code.  Just update `Makefile` to include your UCLA ID and then just type
+    To create the submission, **use the provided Makefile** in the starter code.  Just update `Makefile` to include your Panther ID and then just type
 
         make tarball
 
@@ -684,7 +712,7 @@ Before submission, please make sure:
 3. `.tar.gz` archive does not contain temporary or other unnecessary files.  We will automatically deduct points otherwise.
 
 Submissions that do not follow these requirements will not get any credit.
-{: class="bs-callout bs-callout-danger" }
+{: class="bs-callout bs-callout-warning" }
 
 ## Grading
 

@@ -9,8 +9,8 @@ sass:
 kramdown:
   toc_levels: "2,3"
 
-url: 
-baseurl: 
+url: https://users.cs.fiu.edu
+baseurl: /~afanasyev/classes/fall19/CNT-4713
 
 # Configuration for permalink
 permalink: /:title.html
