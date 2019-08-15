@@ -443,7 +443,7 @@ For this project you should use the provided Vagrant environment, as it installs
 1. Clone project template
 
     ```bash
-    git clone https://github.com/aa-classes/fall19-project3 ~/cnt4713-proj3
+    git clone https://github.com/aa-fiu-classes/fall19-project3 ~/cnt4713-proj3
     cd ~/cnt4713-proj3
     ```
 

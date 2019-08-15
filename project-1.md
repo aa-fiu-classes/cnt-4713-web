@@ -126,7 +126,7 @@ You can easily create an image in your favourite virtualization engine (VirtualB
 
   * Clone project template
 
-        git clone https://github.com/aa-classes/fall19-project1 ~/cnt4713-proj1
+        git clone https://github.com/aa-fiu-classes/fall19-project1 ~/cnt4713-proj1
         cd ~/cnt4713-proj1
 
   * Initialize VM
