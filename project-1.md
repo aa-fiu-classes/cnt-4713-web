@@ -80,7 +80,7 @@ For example, the command below should result in connection to a server on the sa
 
 - The client must be able to connect to the specified server and port, transfer the specified file, and gracefully terminate the connection.
 
-- The client should gracefully process incorrect hostname and port number and exist with a non-zero exit code (you can assume that the specified file is always correct).  In addition to exit, the client must print out on standard error (using `sys.stderr.write()`) an error message that starts with `ERROR:` string.
+- The client should gracefully process incorrect hostname and port number and exit with a non-zero exit code (you can assume that the specified file is always correct).  In addition to exit, the client must print out on standard error (using `sys.stderr.write()`) an error message that starts with `ERROR:` string.
 
 - Client application should exit with code zero after successful transfer of the file to server.  It should support transfer of files that are up to 100 MiB file.
 
@@ -217,10 +217,10 @@ We may test your server against a "standard" implementation of the client, your 
 1. (10 pts, 1 public and 1 private test) Server can properly receive 10 small files (sent without delays) in `1.file`, `2.file`, ... `10.file`
    * a single client connects sequentially
    * 10 clients connect simultaneously (our test will ensure proper ordering of connections)
-1. (5 pts, public test) Client handles abort connection attempt after 10 seconds.
+1. (5 pts, public test) Client aborts connection attempt after 10 seconds.
 1. (5 pts, private test) Client aborts connection when server gets disconnected (server app or network connection is down)
-1. (5 pts, private test) Server aborts connection (a file should be created, containing only `ERROR` string) when doesn't receive data from client for more than 10 seconds
-1. (5 pts, private test) Client able to successfully send and server properly receive and save large file over lossy and large delay network (we will use `tc` based emulation).
+1. (5 pts, private test) Server aborts connection (a file should be created, containing only `ERROR` string) when it does not receive data from client for more than 10 seconds.
+1. (5 pts, private test) Client is able to successfully send and server properly receive and save large file over lossy and large delay network (we will use `tc` based emulation).
 
 
 ### Grading Hint
