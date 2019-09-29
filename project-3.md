@@ -717,7 +717,7 @@ Before submission, please make sure:
 
 ---
 
-**NEW** You will need to submit to Gradescope `.tar.gz` file and **SEPARATELY** any Python files you have created or updated.
+**NEW** You will need to submit to Gradescope `.tar.gz` file and **SEPARATELY** `README.md` and any Python files you have created or updated.
 These must be the exact copies of ones included in the `.tar.gz` file.
 {: class="bs-callout bs-callout-warning" }
 

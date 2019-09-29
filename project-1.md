@@ -185,7 +185,7 @@ Before submission, please make sure:
 
 ---
 
-**NEW** You will need to submit to Gradescope `.tar.gz` file and **SEPARATELY** your `client.py`, `server.py`, and any other Python files you have created.
+**NEW** You will need to submit to Gradescope `.tar.gz` file and **SEPARATELY** your `README.md`, `client.py`, `server.py`, and any other Python files you have created.
 These must be the exact copies of ones included in the `.tar.gz` file.
 {: class="bs-callout bs-callout-warning" }
 
