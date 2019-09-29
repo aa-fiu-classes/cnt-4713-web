@@ -9,7 +9,7 @@ group: "Project 1"
 
 ## Revisions
 
-- None currently
+- Sept 29, 2019: Submission package changes
 
 ## Overview
 
@@ -182,6 +182,14 @@ Before submission, please make sure:
 
 1. Client and server conforms to the specification
 1. `.tar.gz` archive does not contain temporary or other unnecessary files.  We will automatically deduct points otherwise.
+
+---
+
+**NEW** You will need to submit to Gradescope `.tar.gz` file and **SEPARATELY** your `client.py`, `server.py`, and any other Python files you have created.
+These must be the exact copies of ones included in the `.tar.gz` file.
+{: class="bs-callout bs-callout-warning" }
+
+---
 
 Submissions that do not follow these requirements will not get any credit.
 {: class="bs-callout bs-callout-warning" }

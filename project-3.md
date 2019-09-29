@@ -11,6 +11,10 @@ group: "Project 3"
 * toc
 {:toc}
 
+**Revisions**
+
+- Sept 29, 2019: Submission package changes
+
 ## Overview
 
 In this project, you will be writing a simple router with a static routing table. Your router will receive raw Ethernet frames and process them just like a real router: forward them to the correct outgoing interface, create new frames, etc.  The starter code will provide the framework to receive Ethernet frames; your job is to create the forwarding logic.
@@ -710,6 +714,15 @@ Before submission, please make sure:
 1. Your code compiles
 2. Your implementation conforms to the specification
 3. `.tar.gz` archive does not contain temporary or other unnecessary files.  We will automatically deduct points otherwise.
+
+---
+
+**NEW** You will need to submit to Gradescope `.tar.gz` file and **SEPARATELY** any Python files you have created or updated.
+These must be the exact copies of ones included in the `.tar.gz` file.
+{: class="bs-callout bs-callout-warning" }
+
+---
+
 
 Submissions that do not follow these requirements will not get any credit.
 {: class="bs-callout bs-callout-warning" }
