@@ -11,6 +11,7 @@ group: "Project 2"
 **Revisions**
 
 - Sept 29, 2019: Submission package changes
+- Oct 11, 2019: Submission package changes
 
 ## Overview
 
@@ -95,14 +96,14 @@ Both client and server must implement reliable data transfer using unreliable UD
 
 The server application MUST be written in `server.py` file (you can create additional `.py` files and modules), accepting two command-line arguments:
 
-    $ ./server.py <PORT> <FILE-DIR>
+    $ python3 ./server.py <PORT> <FILE-DIR>
 
 - `<PORT>`: port number on which server will "listen" on connections (expects UDP packets to be received).  The server must accept connections coming from any interface.
 - `<FILE-DIR>`: directory name where to save the received files.
 
 For example, the command below should start the server listening on port `5000` and saving received files in the directory `/save`.
 
-    $ ./server.py 5000 /save
+    $ python3 ./server.py 5000 /save
 
 **Requirements**
 
@@ -156,13 +157,13 @@ For example, the command below should start the server listening on port `5000` 
 
 - The server must assume an error if no data is received from the client for over 10 seconds.  It should abort the connection and write a single `ERROR` string into the corresponding file.
 
-- The server should be able to accept and save files up to 100 MiB
+- The server should be able to accept and save files up to 100 MiB.  **This requirement in no way implies that your client should not support larger files! It just ensures to ensure that you considered large files that may not fit in RAM.**
 
 ### Client Application Specification
 
 The client application MUST be written in `client.py` file (you are allowed to create other `.py` files and modules), accepting three command-line arguments:
 
-    $ ./client.py <HOSTNAME-OR-IP> <PORT> <FILENAME>
+    $ python3 ./client.py <HOSTNAME-OR-IP> <PORT> <FILENAME>
 
 - `<HOSTNAME-OR-IP>`: hostname or IP address of the server to connect (send UDP datagrams)
 - `<PORT>`: port number of the server to connect (send UDP datagrams)
@@ -170,7 +171,7 @@ The client application MUST be written in `client.py` file (you are allowed to c
 
 For example, the command below should result in connection to a server on the same machine listening on port 5000 and transfer content of `file.txt`:
 
-    $ ./client.py localhost 5000 file.txt
+    $ python3 ./client.py localhost 5000 file.txt
 
 **Requirements**:
 
@@ -229,7 +230,7 @@ For example, the command below should result in connection to a server on the sa
                   close
                 connection
 
-- Client should support transfer of files that are up to `100 MiB`.
+- Client should support transfer of files that are up to `100 MiB`. **This requirement in no way implies that your client should not support larger files! It just ensures to ensure that you considered large files that may not fit in RAM.**
 
 - Whenever client receives no packets from server for more than `10 seconds`, it should abort the connection (close socket and exit with non-zero code)
 
@@ -316,32 +317,32 @@ This error is especially baffling because it can sometimes occur for some test c
 
 ### Emulating packet loss
 
-If are using the [Vagrantfile provided in project-2 skeleton](https://github.com/aa-fiu-classes/fall19-project2), you can automatically instantiate two virtual machines that are connected to each other using a private network (`enp0s8` interface on each).  You can also run preinstalled `/set-loss.sh` script to enable emulation of 10% loss and delay of 20ms in each direction (need to run on each VM separately).
+If are using the [Vagrantfile provided in project-2 skeleton](https://github.com/aa-fiu-classes/fall19-project2), you can automatically instantiate two virtual machines that are connected to each other using a private network (`eth1` interface on each).  You can also run preinstalled `/set-loss.sh` script to enable emulation of 10% loss and delay of 20ms in each direction (need to run on each VM separately).
 
 You can use the following commands to adjust parameters of the emulation:
 
-- To check the current parameters for the private network (`enp0s8`)
+- To check the current parameters for the private network (`eth1`)
 
-        tc qdisc show dev enp0s8
+        sudo tc qdisc show dev eth1
 
 - To change current parameters to loss rate of 20% and delay 100ms:
 
-        tc qdisc change dev enp0s8 root netem loss 20% delay 100ms
+        sudo tc qdisc change dev eth1 root netem loss 20% delay 100ms
 
 - To delete the network emulation:
 
-        tc qdisc del dev enp0s8 root
+        sudo tc qdisc del dev eth1 root
 
 - If network emulation hasn't yet setup or you have deleted it, you can add it to, e.g., 10% loss without delay emulation:
 
-        tc qdisc add dev enp0s8 root netem loss 10%
+        sudo tc qdisc add dev eth1 root netem loss 10%
 
 - You can also change network emulation to re-order packets.  The command below makes 4 out of every 5 packets (1-4, 6-9, ...) to be delayed by 100ms, while every 5th packet (, 10, 15, ...) will be sent immediately:
 
-        tc qdisc change dev enp0s8 root netem reorder 100% gap 5 delay 100ms
+        sudo tc qdisc change dev eth1 root netem reorder 100% gap 5 delay 100ms
 
         # or if you're just adding the rule
-        # tc qdisc add dev enp0s8 root netem reorder 100% gap 5 delay 100ms
+        # sudo tc qdisc add dev eth1 root netem reorder 100% gap 5 delay 100ms
 
 - More examples can be found in [Network Emulation tutorial](http://www.linuxfoundation.org/collaborate/workgroups/networking/netem)
 
@@ -349,13 +350,13 @@ If you are not using the provided Vagrant, you should adjust network interface t
 
 ## Environment Setup
 
-The best way to guarantee full credit for the project is to do project development using a Ubuntu 16.04-based virtual machine.
+The best way to guarantee full credit for the project is to do project development using a Ubuntu 18.04-based virtual machine.
 
 You can easily create an image in your favourite virtualization engine (VirtualBox, VMware) using the Vagrant platform and steps outlined below.
 
 ### Set up Vagrant and create VM instance
 
-**Note that all example commands are executed on the host machine (your laptop), e.g., in Terminal.app (or iTerm2.app) on OS X, cmd in Windows, and console or xterm on Linux.  After the last step (`vagrant ssh`) you will get inside the virtual machine and can compile your code there.**
+**Note that all example commands are executed on the host machine (your laptop), e.g., in Terminal.app (or iTerm2.app) on macOS, cmd in Windows, and console or xterm on Linux.  After the last step (`vagrant ssh`) you will get inside the virtual machine and can compile your code there.**
 
 - Download and install your favourite virtualization engine, e.g., [VirtualBox](https://www.virtualbox.org/wiki/Downloads)
 
@@ -390,11 +391,11 @@ You can easily create an image in your favourite virtualization engine (VirtualB
 
         vagrant ssh server
 
-  If you are using Putty on Windows platform, `vagrant ssh` (`vagrant ssh server`) will return information regarding the IP address and the port to connect to your virtual machine.
+  If you are using PuTTY on Windows platform, `vagrant ssh` (`vagrant ssh server`) will return information regarding the IP address and the port to connect to your virtual machine.
 
 - Work on your project
 
-  All files in `~/cs118-proj2` folder on the host machine will be automatically synchronized with `/vagrant` folder on both virtual machines.  For example, to compile your code, you can run the following commands:
+  All files in `~/cnt4713-proj2` folder on the host machine will be automatically synchronized with `/vagrant` folder on both virtual machines.  For example, to compile your code, you can run the following commands:
 
         vagrant ssh
         cd /vagrant
@@ -404,7 +405,7 @@ You can easily create an image in your favourite virtualization engine (VirtualB
 
 * If you want to open another SSH session, just open another terminal and run `vagrant ssh` (or create a new Putty session).
 
-* The client and server VMs are connected using the private network `10.0.0.0/24` (`enp0s8`)
+* The client and server VMs are connected using the private network `10.0.0.0/24` (`eth1`)
 
   - client's IP address: `10.0.0.2`
   - server's IP address: `10.0.0.1`
@@ -418,7 +419,7 @@ You can easily create an image in your favourite virtualization engine (VirtualB
         $ vagrant ssh
         vagrant@client:~$ cd /vagrant
         vagrant@client:/vagrant$ ls -a
-        .  ..  client.py  confundo.lua  .gitignore  Makefile  README.md  server.py  .vagrant  Vagrantfile
+        .  ..  client.py  confundo.lua  .gitignore  README.md  server.py  .vagrant  Vagrantfile
 
 * You are now free to add more files and modify the Makefile to make the `server.py` and `client.py` full-fledged implementation.
 
@@ -436,30 +437,12 @@ To submit your project, you need to prepare:
 
     **If you need additional dependencies for your project, you must update Vagrant file.**
 
-1. Update Makefile, updating UID variable to the list of UIDs for all members of the group separated by underscore.  For example,
+1. Submit all your source code (`client.py`, `server.py`, and any other Python files you have created) and `README.md` to Gradescope.
 
-        UID=123456789_987654321_111223333
+Note, compared to project 1, you do not need to submit `.tar.gz` file or any other non-source code or README files.
 
-1. All your source code, `Makefile`, `README.md`, `Vagrantfile`, `confundo.lua`, and `.git` folder with your git repository history as a `.tar.gz` archive (and any files from extra credit part).
-
-    To create the submission, **use the provided Makefile** in the skeleton project.  Just update `Makefile` to include your Panther ID and then just type
-
-        make tarball
-
-    Then submit the resulting (e.g., `123456789_987654321_111223333.tar.gz`) archive to Gradescope.
-
-Before submission, please make sure:
-
-1. Client and server conforms to the specification
-2. `.tar.gz` archive does not contain temporary or other unnecessary files.  We will automatically deduct points otherwise.
-
----
-
-**NEW** You will need to submit to Gradescope `.tar.gz` file and **SEPARATELY** your `README.md`, `client.py`, `server.py`, and any other Python files you have created.
-These must be the exact copies of ones included in the `.tar.gz` file.
-{: class="bs-callout bs-callout-warning" }
-
----
+Before submission, please make sure that the client and server conforms to the specification.
+DO NOT implement parts that are not defined in the specification or you may not pass the automated tests.
 
 Submissions that do not follow these requirements will not get any credit.
 {: class="bs-callout bs-callout-warning" }
@@ -476,13 +459,11 @@ We may test your server against a "standard" implementation of the client, your 
 
 1. Miscellaneous tests
 
-    1.1. (2.5 pts, public) At least 3 git commits (at least one from each group member)
+    1.2. (2.5 pts, public) Client handles incorrect hostname (non-existing hostname)
 
-    1.2. (1.25 pts, public) Client handles incorrect hostname
+    1.3. (1.25 pts, public) Client handles incorrect port (negative, exceeding range, invalid service name)
 
-    1.3. (1.25 pts, public) Client handles incorrect port
-
-    1.4. (2.5 pts, public) Server handles incorrect port number
+    1.4. (2.5 pts, public) Server handles incorrect port number (negative, exceeding range, non-number, invalid service name)
 
 2. Client tests
 
