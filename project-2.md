@@ -12,6 +12,7 @@ group: "Project 2"
 
 - Sept 29, 2019: Submission package changes
 - Oct 11, 2019: Submission package changes
+- Nov 3, 2019: Submission requirements change (full credit for working client)
 
 ## Overview
 
@@ -457,29 +458,31 @@ We may test your server against a "standard" implementation of the client, your 
 
 ### Grading Criteria
 
-1. Miscellaneous tests
+1. Miscellaneous tests (10pts)
+
+    1.1  (2.5 pts, will be deducted manually if violates) At least 3 git commits (at least one from each group member): MUST include copy of `git log --pretty=format:"%h%x09%an%x09%ad%x09%s"`
 
     1.2. (2.5 pts, public) Client handles incorrect hostname (non-existing hostname)
 
-    1.3. (1.25 pts, public) Client handles incorrect port (negative, exceeding range, invalid service name)
+    1.3. (2.5 pts, public) Client handles incorrect port (negative, exceeding range, invalid service name)
 
-    1.4. (2.5 pts, public) Server handles incorrect port number (negative, exceeding range, non-number, invalid service name)
+    1.4. (2.5 pts) free credit <del>(2.5 pts, public) Server handles incorrect port number (negative, exceeding range, non-number, invalid service name)</del>
 
-2. Client tests
+2. Client tests (90pts)
 
-    2.1. (2.5 pts, public) Client initiates three-way handshake by sending a SYN packet with correct values in its header
+    2.1. (5 pts, public) Client initiates three-way handshake by sending a SYN packet with correct values in its header
 
-    2.2. (2.5 pts, public) Client has correct initial values for CWND, SS-THRESH, and Sequence Number
+    2.2. (5 pts, public) Client has correct initial values for CWND, SS-THRESH, and Sequence Number
 
     2.3. (5 pts, public) Data segments that client sends are not exceeding 512 bytes and on average larger than 500 bytes (for 1~MByte file)
 
-    2.4. (2.5 pts, public) Client should reset its sequence number to zero when the sequence number reaches the maximum value
+    2.4. (5 pts, public) Client should reset its sequence number to zero when the sequence number reaches the maximum value (2.5pts if wraps, 2.5pts if wraps correctly)
 
-    2.5. (2.5 pts, public) Client sends a FIN packet after transmitting a file
+    2.5. (5 pts, public) Client sends a FIN packet after transmitting a file
 
-    2.6. (2.5 pts, public) After finishing connection, client responds with ACK for incoming FINs for 2 seconds, dropping packets for this connection afterwards
+    2.6. (5 pts, public) After finishing connection, client responds with ACK for incoming FINs for 2 seconds, dropping packets for this connection afterwards
 
-    2.7. (5 pts, private) Client successfully transmits a small file
+    2.7. (10 pts, private) Client successfully transmits a small file
 
     2.8. (5 pts, private) Client aborts the connection if no incoming packets for more than 10 seconds
 
@@ -487,37 +490,48 @@ We may test your server against a "standard" implementation of the client, your 
 
     2.10. (5 pts, private) Client properly increases congestion window size in congestion avoidance phase
 
-    2.11. (5 pts, public) Client detects and retransmits lost data segments
+    2.11. (10 pts, public) Client detects and retransmits lost data segments
 
     2.12. (5 pts, private) Client sets SS-THRESH and CWND values properly after timeout
 
-3. Server tests
+    2.13. (10 pts, private) Client successfully transmits a small file over a lossy link with delay
 
-    3.1. (2.5 pts, public) Server responses with SYN-ACK packet with correct connection ID
+    2.14. (10 pts, private) Client successfully transmits a large file over a lossy link with delay
 
-    3.2. (2.5 pts, public) Server has correct initial values for CWND, SS-THRESH, and Sequence Number
 
-    3.3. (5 pts, public) Server responds with ACK packets, which include the next expected in-sequence byte to receive (cumulative ACK)
+#### Extra credits (by request only)
 
-    3.4. (5 pts, private) Server able to receive a large file (10 MiB bytes) and save it in 1.file without delay, loss, and reorder
+1. Code structure
 
-    3.5. (5 pts, private) Server able to receive a large file (10 MiB bytes) and save it in 1.file over lossy and large delay network
+    - Well organized code, with abstraction for Connection, data stream(s), etc.
+
+2. Server checks
+
+    3.1. () Server responses with SYN-ACK packet with correct connection ID
+
+    3.2. () Server has correct initial values for CWND, SS-THRESH, and Sequence Number
+
+    3.3. () Server responds with ACK packets, which include the next expected in-sequence byte to receive (cumulative ACK)
+
+    3.4. () Server able to receive a large file (10 MiB bytes) and save it in 1.file without delay, loss, and reorder
+
+    3.5. () Server able to receive a large file (10 MiB bytes) and save it in 1.file over lossy and large delay network
 
     * We will use `tc` command with reorder, gap, and delay to generate reordered and delayed packets
     * Test need to pass under different packet delays (50 ms ~ 100 ms) and reorder rates
     * We will not test timeout on the server side
 
-    3.6. (5 pts, private) Server able to receive 10 small files (1 MiB bytes) in 1.file, 2.file, ..., 10.file without delay, loss, and reorder (sequentially)
+    3.6. () Server able to receive 10 small files (1 MiB bytes) in 1.file, 2.file, ..., 10.file without delay, loss, and reorder (sequentially)
 
-    3.7. (5 pts, private) Server able to receive 10 small files (1 MiB bytes) in 1.file, 2.file, ..., 10.file without delay, loss, and reorder (in parallel)
+    3.7. () Server able to receive 10 small files (1 MiB bytes) in 1.file, 2.file, ..., 10.file without delay, loss, and reorder (in parallel)
 
-    3.8. (7.5 pts, private) Server able to receive 10 small files (1 MiB bytes) in 1.file, 2.file, ..., 10.file over lossy and large delay network (sequentially)
+    3.8. () Server able to receive 10 small files (1 MiB bytes) in 1.file, 2.file, ..., 10.file over lossy and large delay network (sequentially)
 
     * We will use `tc` command with loss and delay to generate the lossy and large delay network
     * Test need to pass under different packet delays (50 ms ~ 100 ms) and packet loss rates (1% ~ 10%)
     * We will not test timeout on the server side
 
-    3.9. (7.5 pts, private) Server able to receive 10 small files (1 MiB bytes) in 1.file, 2.file, ..., 10.file over lossy and large delay network (in parallel)
+    3.9. () Server able to receive 10 small files (1 MiB bytes) in 1.file, 2.file, ..., 10.file over lossy and large delay network (in parallel)
 
     * We will use `tc` command with loss and delay to generate the lossy and large delay network
     * Test need to pass under different packet delays (50 ms ~ 100 ms) and packet loss rates (1% ~ 10%)
