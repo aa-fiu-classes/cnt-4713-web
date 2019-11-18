@@ -14,6 +14,7 @@ group: "Project 3"
 **Revisions**
 
 - Sept 29, 2019: Submission package changes
+- Nov 18, 2019: Updates of the starter code description and submission package clarification
 
 ## Overview
 
@@ -587,11 +588,7 @@ To run your router, you will need to run in parallel two commands: Mininet proce
     vagrant ssh
 
     cd /vagrant
-    #
-    # implement router logic // see below
-    #
-    make
-    ./router
+    python3 ridikkulus_router.py
     ```
 
     <span class="label label-info">Note</span>
