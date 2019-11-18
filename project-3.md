@@ -38,7 +38,7 @@ There are four main parts in this assignment:
 - Handle Ethernet frames
 - Handle ARP packets
 - Handle IPv4 packets
-- Handle ICMP packets
+- Handle select ICMP packets
 
 This assignment runs on top of [Mininet](http://mininet.org/) which was built at Stanford.  Mininet allows you to emulate a network topology on a single machine.  It provides the needed isolation between the emulated nodes so that your router node can process and forward real Ethernet frames between the hosts like a real router.  You don't have to know how Mininet works to complete this assignment, but if you're curious, you can learn more information about Mininet on [its official website](http://mininet.org/).
 
@@ -148,35 +148,47 @@ The starter code will provide you with a  [raw Ethernet frame](https://en.wikipe
     |                                                               |
     +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-Note that actual Ethernet frame also includes a 32-bit Cyclical Redundancy Check (CRC). In this project, you will not need it, as it will be added automatically.
+Note that the actual Ethernet frame also includes a 32-bit Cyclical Redundancy Check (CRC). In this project, you will not need it, as it will be added automatically.
 
 - `Type`: Payload type
 
     * `0x0806` (ARP)
     * `0x0800` (IPv4)
 
-{% comment %}
+For your convenience, the starter code defines Ethernet header as `EtherHeader` class in `router_base/headers.py`.
+The class gives direct access to header fields:
 
-For your convenience, the starter code defines Ethernet header as an `ethernet_hdr` structure in `core/protocol.py`:
+- `dhost` (6 bytes): destination ethernet address
+- `shost` (6 bytes): source ethernet address
+- `type`  (2 bytes): packet type ID
+
+Given a buffer `buf` that contains a packet with Ethernet header, you can decode it using the following code:
 
 ```python
-class ethernet_hdr:
-  ether_dhost
-  ether_dhost
-  ether_type
-
-  @static_method
-
-
-struct ethernet_hdr
-{
-  uint8_t  ether_dhost[ETHER_ADDR_LEN]; /* destination ethernet address */
-  uint8_t  ether_shost[ETHER_ADDR_LEN]; /* source ethernet address */
-  uint16_t ether_type;                  /* packet type ID */
-} __attribute__ ((packed)) ;
+from router_base import headers
+pkt = headers.EtherHeader(buf)
 ```
 
-{% endcomment %}
+To create a new Ethernet header:
+
+```python
+from router_base import headers
+pkt = headers.EtherHeader(shost="f0:18:98:96:E3:18", dhost="f8:e9:4e:74:de:3a", type=2054)
+buf = pkt.encode()
+```
+
+If you have a buffer `buf` that contains a packet with Ethernet header that you want to replace (or change a field), you can use the following code:
+
+```python
+from router_base import headers
+pkt = headers.EtherHeader()
+offset = pkt.decode(buf)
+
+pkt.dhost = "ff:ff:ff:ff:ff:ff"
+new_header = pkt.encode()
+
+new_packet = buf[0:offset] + new_header
+```
 
 **Requirements**
 
@@ -229,26 +241,50 @@ Note that ARP requests are sent to the broadcast MAC address (`FF:FF:FF:FF:FF:FF
 
 * `Prot addr len`: number of octets in the requested network address. IPv4 has 4-octet addresses, so 0x04.
 
-{% comment %}
 
-For your convenience, the starter code defines the ARP header as an `arp_hdr` structure in `core/protocol.hpp`:
+For your convenience, the starter code defines ARP header as `ArpHeader` class in `router_base/headers.py`. The class gives direct access to header fields:
 
-```c++
-struct arp_hdr
-{
-  unsigned short  arp_hrd;                 /* format of hardware address   */
-  unsigned short  arp_pro;                 /* format of protocol address   */
-  unsigned char   arp_hln;                 /* length of hardware address   */
-  unsigned char   arp_pln;                 /* length of protocol address   */
-  unsigned short  arp_op;                  /* ARP opcode (command)         */
-  unsigned char   arp_sha[ETHER_ADDR_LEN]; /* sender hardware address      */
-  uint32_t        arp_sip;                 /* sender IP address            */
-  unsigned char   arp_tha[ETHER_ADDR_LEN]; /* target hardware address      */
-  uint32_t        arp_tip;                 /* target IP address            */
-} __attribute__ ((packed)) ;
+- `hrd` (2 bytes): format of hardware address
+- `pro` (2 bytes): format of protocol address
+- `hln` (1 byte):  length of hardware address
+- `pln` (1 byte):  length of protocol address
+- `op`  (2 bytes): ARP opcode (command)
+- `sha` (6 bytes): sender hardware address
+- `sip` (4 bytes): sender IPv4 address
+- `tha` (6 bytes): target hardware address
+- `tip` (4 bytes): target IP address
+
+Given a buffer `buf` that contains a packet with ARP header, you can decode it using the following code:
+
+```python
+from router_base import headers
+pkt = headers.ArpHeader(buf)
+
+# if buf contains Ethernet header first, use the proper offset slicing, for example
+# pkt = headers.ArpHeader(buf[14:])
 ```
 
-{% endcomment %}
+To create a new ARP header:
+
+```python
+from router_base import headers
+pkt = headers.ArpHeader(hln=6, pln=4, op=1, sha='f0:18:98:96:e3:18', sip='192.168.100.156', tha='f8:e9:4e:74:de:3a', tip='192.168.100.151')
+buf = pkt.encode()
+```
+
+If you have a buffer `buf` that contains a packet with ARP header that you want to replace (or change a field), you can use the following code:
+
+```python
+from router_base import headers
+pkt = headers.ArpHeader()
+offset = pkt.decode(buf)
+
+pkt.sip = "1.1.1.1"
+pkt.sha = "ff:ff:ff:ff:ff:ff"
+new_header = pkt.encode()
+
+new_packet = buf[0:offset] + new_header
+```
 
 **Requirements**
 
@@ -272,8 +308,10 @@ struct arp_hdr
 
   If your router didn't receive ARP reply after re-transmitting an ARP request 5 times, it should stop re-transmitting, remove the pending request, and any packets that are queued for the transmission that are associated with the request.
 
+{% comment %}
   <span class="label label-info">Extra Credit</span>
   Your router can also send an ICMP Destination Unreachable message to the source IP.
+{% endcomment %}
 
 ### IPv4 Packets
 
@@ -302,27 +340,51 @@ struct arp_hdr
         +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
 
-{% comment %}
+For your convenience, the starter code defines ARP header as `IpHeader` class in `router_base/headers.py`. The class gives direct access to header fields:
 
-For your convenience, the starter code defines the IPv4 header as an `ip_hdr` structure in `core/protocol.hpp`:
+- `v`  (4 bits):   IPv4 version (4 bits)
+- `hl` (4 bits):   Header length (4 bits)
+- `tos` (1 byte):  type of service
+- `len` (2 bytes): total length
+- `id`  (2 bytes): identification
+- `off` (2 bytes): fragment offset field and flags
+- `ttl` (1 byte):  time to live
+- `p`   (1 byte):  protocol
+- `sum` (2 bytes): checksum
+- `src` (4 bytes): source address
+- `dst` (4 bytes): dest address
 
-```c++
-struct ip_hdr
-{
-  unsigned int ip_hl:4;            /* header length */
-  unsigned int ip_v:4;             /* version */
-  uint8_t ip_tos;                  /* type of service */
-  uint16_t ip_len;                 /* total length */
-  uint16_t ip_id;                  /* identification */
-  uint16_t ip_off;                 /* fragment offset field */
-  uint8_t ip_ttl;                  /* time to live */
-  uint8_t ip_p;                    /* protocol */
-  uint16_t ip_sum;                 /* checksum */
-  uint32_t ip_src, ip_dst;         /* source and dest address */
-} __attribute__ ((packed));
+Given a buffer `buf` that contains a packet with IP header, you can decode it using the following code:
+
+```python
+from router_base import headers
+pkt = headers.IpHeader(buf)
+
+# if buf contains Ethernet header first, use the proper offset slicing, for example
+# pkt = headers.IpHeader(buf[14:])
 ```
 
-{% endcomment %}
+To create a new IP header:
+
+```python
+from router_base import headers
+pkt = headers.IpHeader(hl=5, tos=0, len=84, id=42095, off=0, ttl=53, p=1, sum=47603, src='1.1.1.1', dst='192.168.100.156')
+buf = pkt.encode()
+```
+
+If you have a buffer `buf` that contains a packet with IP header that you want to replace (or change a field), you can use the following code:
+
+```python
+from router_base import headers
+pkt = headers.IpHeader()
+offset = pkt.decode(buf)
+
+pkt.src = "1.1.1.1"
+pkt.dst = "2.2.2.2"
+new_header = pkt.encode()
+
+new_packet = buf[0:offset] + new_header
+```
 
 **Requirements**
 
@@ -399,21 +461,55 @@ When an ICMP message is composed by a router, the source address field of the in
 
 Note that `Time Exceeded` message is needed for `traceroute` to work properly.
 
-{% comment %}
+For your convenience, the starter code defines ICMP header for types 0, 3, 4, 8, and 11 and as `IcmpHeader` class in `router_base/headers.py`. The class gives direct access to header fields:
 
-For your convenience, the starter code defines the ICMP header as an `icmp_hdr` structure in `core/protocol.hpp`:
+- `type` (1 byte):  ICMP Type
+- `code` (2 bytes): ICMP Code
+- `sum`  (2 bytes): ICMP Checksum
 
-```c++
-struct icmp_hdr {
-  uint8_t icmp_type;
-  uint8_t icmp_code;
-  uint16_t icmp_sum;
-} __attribute__ ((packed));
+For types 3, 11, and 4:
+- `data` (variable length): original IP header + 8 bytes of Original Data Datagram
+
+For types 0 and 8
+- `id` (2 bytes):           If code = 0, an identifier to aid in matching echos and replies, may be zero.
+- `seqNum` (2 bytes):       If code = 0, a sequence number to aid in matching echos and replies, may be zero.
+- `data` (variable length): Opaque data
+
+Given a buffer `buf` that contains a packet with ICMPs header, you can decode it using the following code:
+
+```python
+from router_base import headers
+pkt = headers.IcmpHeader(buf)
+
+# if buf contains Ethernet and IP header first, use the proper offset slicing, for example
+# pkt = headers.IcmpHeader(buf[14+20:])
+#
+# However, note that IP header can contain options and it's size not fixed to 20 bytes.
+# Therefore, to properly handle offset, you will need to decode IP header first, then obtain header length,
+# and calculate the offset.
 ```
 
-{% endcomment %}
+To create a new ICMP header:
 
-You may want to create additional structs for ICMP messages, but make sure to use the proper packing/unpacking methods.
+```python
+from router_base import headers
+pkt = headers.IcmpHeader(type=0, code=0, sum=26887, id=50522, seqNum=2, data=b'random-data')
+buf = pkt.encode()
+```
+
+The starter code has limited support for changing fields in ICMP header.
+If you have a buffer `buf` that contains a packet with ICMP header that you want to replace (or change a field), you can use the following code:
+
+```python
+from router_base import headers
+pkt = headers.IcmpHeader()
+offset = pkt.decode(buf)
+
+pkt.type = 0
+new_header = pkt.encode()
+
+new_packet = buf[0:offset] + new_header
+```
 
 **Requirements**
 
@@ -428,8 +524,7 @@ Your router should properly generate the following ICMP messages, including prop
 
     Sent if an IP packet is discarded during processing because the TTL field is 0. This is needed for traceroute to work.
 
-- <span class="label label-info">Extra Credit</span>
-  `Port Unreachable` message (`type 3`, `code 3`):
+- `Port Unreachable` message (`type 3`, `code 3`):
 
     Sent if an IP packet containing a UDP or TCP payload is sent to one of the router's interfaces. This is needed for traceroute to work.
 
@@ -532,6 +627,8 @@ Apr 09 19:57:48 vagrant pox.py[8879]: INFO:core:POX 0.5.0 (eel) is up.
 ...
 ```
 
+{% comment %}
+
 ## Starter Code Overview
 
 Here is the overal structure of the starter code:
@@ -571,8 +668,6 @@ Here is the overal structure of the starter code:
 - `ArpCache` (`arp_cache.py`)
 
     Class for handling ARP entries and pending ARP requests.
-
-{% comment %}
 
 ### Key Methods
 
@@ -632,10 +727,6 @@ We have provided you with some basic debugging functions in `core/utils.hpp` (`c
 - `print_hdrs(const uint8_t *buf, uint32_t length)`, `print_hdrs(const Buffer& packet)`
 
      Print out all possible headers starting from the Ethernet header in the packet
-
-- `ipToString(uint32_t ip)`, `ipToString(const in_addr& address)`
-
-    Print out a formatted IP address from a `uint32_t` or `in_addr`. Make sure you are passing the IP address in the correct byte ordering
 
 {% endcomment %}
 
@@ -701,28 +792,7 @@ To submit your project, you need to prepare:
     * List of any additional libraries used
     * Acknowledgement of any online tutorials or code example (except class website) you have been using.
 
-1. All your source code, `Makefile`, `README.md`, `Vagrantfile`, `confundo.lua`, and `.git` folder with your git repository history as a `.tar.gz` archive (and any files from extra credit part).
-
-    To create the submission, **use the provided Makefile** in the starter code.  Just update `Makefile` to include your Panther ID and then just type
-
-        make tarball
-
-    Then submit the resulting archive to Gradescope.
-
-Before submission, please make sure:
-
-1. Your code compiles
-2. Your implementation conforms to the specification
-3. `.tar.gz` archive does not contain temporary or other unnecessary files.  We will automatically deduct points otherwise.
-
----
-
-**NEW** You will need to submit to Gradescope `.tar.gz` file and **SEPARATELY** `README.md` and any Python files you have created or updated.
-These must be the exact copies of ones included in the `.tar.gz` file.
-{: class="bs-callout bs-callout-warning" }
-
----
-
+2. Submit to Gradescope via connection to Github. Do not submit individual files or .zip file, as it will most likely result in grading failures.
 
 Submissions that do not follow these requirements will not get any credit.
 {: class="bs-callout bs-callout-warning" }
@@ -773,9 +843,7 @@ Submissions that do not follow these requirements will not get any credit.
 
 Note that the router should work in other single-router network topologies / with different routing tables
 
-### Deductions
-
-(-5 pts) The submission archive contains temporary or other non-source code file, except `README.md`, `Vagrantfile`, files under `.git` subfolder (and any files from extra credit part).
+{% comment %}
 
 ### Extra Credit (included in the above)
 
@@ -786,6 +854,8 @@ Note that the router should work in other single-router network topologies / wit
 - (1 pt) ICMP port unreachable
 
     * The router must handle TCP/UDP packets sent to one of its interfaces. In this case the router should respond with an ICMP port unreachable message.
+
+{% endcomment %}
 
 ## Acknowledgement
 
