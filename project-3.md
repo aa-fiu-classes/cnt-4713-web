@@ -15,6 +15,7 @@ group: "Project 3"
 
 - Sept 29, 2019: Submission package changes
 - Nov 18, 2019: Updates of the starter code description and submission package clarification
+- Nov 25, 2019: Grading criteria adjustments, bug fixes of the code examples
 
 ## Overview
 
@@ -186,9 +187,8 @@ pkt = headers.EtherHeader()
 offset = pkt.decode(buf)
 
 pkt.dhost = "ff:ff:ff:ff:ff:ff"
-new_header = pkt.encode()
 
-new_packet = buf[0:offset] + new_header
+new_packet = pkt.encode() + buf[offset:]
 ```
 
 **Requirements**
@@ -282,9 +282,8 @@ offset = pkt.decode(buf)
 
 pkt.sip = "1.1.1.1"
 pkt.sha = "ff:ff:ff:ff:ff:ff"
-new_header = pkt.encode()
 
-new_packet = buf[0:offset] + new_header
+new_packet = pkt.encode() + buf[offset:]
 ```
 
 **Requirements**
@@ -309,10 +308,7 @@ new_packet = buf[0:offset] + new_header
 
   If your router didn't receive ARP reply after re-transmitting an ARP request 5 times, it should stop re-transmitting, remove the pending request, and any packets that are queued for the transmission that are associated with the request.
 
-{% comment %}
-  <span class="label label-info">Extra Credit</span>
-  Your router can also send an ICMP Destination Unreachable message to the source IP.
-{% endcomment %}
+  Your router should also send an ICMP Destination Unreachable message to the source IP.
 
 ### IPv4 Packets
 
@@ -382,9 +378,8 @@ offset = pkt.decode(buf)
 
 pkt.src = "1.1.1.1"
 pkt.dst = "2.2.2.2"
-new_header = pkt.encode()
 
-new_packet = buf[0:offset] + new_header
+new_packet = pkt.encode() + buf[offset:]
 ```
 
 **Requirements**
@@ -507,9 +502,8 @@ pkt = headers.IcmpHeader()
 offset = pkt.decode(buf)
 
 pkt.type = 0
-new_header = pkt.encode()
 
-new_packet = buf[0:offset] + new_header
+new_packet = pkt.encode() + buf[offset:]
 ```
 
 **Requirements**
@@ -798,61 +792,51 @@ Submissions that do not follow these requirements will not get any credit.
 
 ### Grading Criteria
 
-1. Miscellaneous tests
+Note that test cases and points are subject adjustments.
 
-    * 1.1. (5 pts, public) At least 3 git commits (at least one from each group member)
+1. Ping tests (50 pts)
 
-2. Ping tests
+    * 1.1. (5 pts, public) Pings from client to all other hosts (all pings expected to succeed), including non-existing host (error expected)
 
-    * 2.1. (5 pts, public) Pings from client to all other hosts (all pings expected to succeed), including non-existing host (error expected)
+    * 1.2. (5 pts, public) Pings from server1 to all other hosts (all pings expected to succeed), including non-existing host (error expected)
 
-    * 2.2. (5 pts, public) Pings from server1 to all other hosts (all pings expected to succeed), including non-existing host (error expected)
+    * 1.3. (5 pts, public) Pings from server2 to all other hosts (all pings expected to succeed), including non-existing host (error expected)
 
-    * 2.3. (5 pts, public) Pings from server2 to all other hosts (all pings expected to succeed), including non-existing host (error expected)
+    * 1.4. (5 pts, public) Ping responses (from client) have proper TTLs
 
-    * 2.4. (5 pts, public) Ping responses (from client) have proper TTLs
-
-    * 2.5. (5 pts, public)  Ping from client to server1, check ARP cache, there should be two entries
+    * 1.5. (5 pts, public) Ping from client to server1, check ARP cache, there should be two entries
  
-    * 2.6. (10, private)  Ping from client to server1, after 40 seconds, the ARP cache should be empty (+ no segfaults)
+    * 1.6. (10 pts, private)  Ping from client to server1, after 40 seconds, the ARP cache should be empty (+ no segfaults)
 
-    * 2.7. (10, private)  Ping from client a non-existing IP, router sends proper ARP requests (+ no segfaults)
+    * 1.7. (10 pts, private)  Ping from client a non-existing IP, router sends proper ARP requests (+ no segfaults)
 
-    * 2.8. (Extra 1 pts, private)  Ping from client, receive host unreachable message
+    * 1.8. (5 pts, private)  Ping from client, receive host unreachable message
 
-3. Traceroute tests
+2. Traceroute tests (20 pts)
 
-    * 3.1. (10 pts, public) Traceroute from client to all other hosts, including a non-existing host
+    * 2.1. (5 pts, public) Traceroute from client to all other hosts, including a non-existing host
 
-    * 3.2. (10 pts, private) Traceroute from server1 to all other hosts, including a non-existing host
+    * 2.2. (5 pts, private) Traceroute from server1 to all other hosts, including a non-existing host
 
-    * 3.3. (10 pts, private) Traceroute from server2 to all other hosts, including a non-existing host
+    * 2.3. (5 pts, private) Traceroute from server2 to all other hosts, including a non-existing host
 
-    * 3.4. (Extra: 1 pts, private) Traceroute from client to router's interfaces (get 1 line)
+    * 2.4. (5 pts, private) Traceroute from client to router's interfaces (get 1 line)
 
-4. File transfer tests
+3. File transfer tests (20 pts)
 
-    * 4.1. (10 pts, public) Transfer a small file (50k) from server1 to client
+    * 3.1. (10 pts, public) Transfer a small file (50k) from server1 to client
 
-    * 4.2. (5 pts, private) transfer a medium file (1M) from server1 to client
+    * 3.2. (10 pts, private) transfer a medium file (1M) from server1 to client
 
-    * 4.3. (5 pts, private) transfer a large file (10M) from server1 to client
+    * 3.3. (10 pts, private) transfer a large file (10M) from server1 to client
+
+4. Additional ICMP tests (10 pts)
+
+    * 4.1. (5 pt) ICMP destination unreachable: when no ARP reply after `5 requests` and enqueued packets are dropped.
+
+    * 4.2. (5 pts) ICMP port unreachable when router receives IP/UDP packets sent to one of its interface.
 
 Note that the router should work in other single-router network topologies / with different routing tables
-
-{% comment %}
-
-### Extra Credit (included in the above)
-
-- (1 pt) ICMP destination unreachable
-
-    * When no ARP reply after `5 requests` and enqueued packets are dropped.
-
-- (1 pt) ICMP port unreachable
-
-    * The router must handle TCP/UDP packets sent to one of its interfaces. In this case the router should respond with an ICMP port unreachable message.
-
-{% endcomment %}
 
 ## Acknowledgement
 
