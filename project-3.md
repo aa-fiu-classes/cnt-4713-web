@@ -16,6 +16,7 @@ group: "Project 3"
 - Sept 29, 2019: Submission package changes
 - Nov 18, 2019: Updates of the starter code description and submission package clarification
 - Nov 25, 2019: Grading criteria adjustments, bug fixes of the code examples
+- Nov 27, 2019: Add additional codes for ICMP type 3
 
 ## Overview
 
@@ -450,6 +451,8 @@ In this assignment, your router will use ICMP to send messages back to a sending
 
     * `Code`
 
+      - `0`: Destination net Unreachable
+      - `1`: Destination host Unreachable
       - `3`: Destination port unreachable
 
 
