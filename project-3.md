@@ -69,9 +69,9 @@ The corresponding routing table for the SimpleRouter `sw0` in this default topol
 
     Destination  Gateway      Mask             Iface
     ------------ ------------ ---------------- --------
-    0.0.0.0      10.0.1.100   0.0.0.0          sw0-eth3
-    192.168.2.2  192.168.2.2  255.255.255.0    sw0-eth1
-    172.64.3.10  172.64.3.10  255.255.0.0      sw0-eth2
+    10.0.1.0     0.0.0.0      255.255.255.0    sw0-eth3
+    192.168.2.0  0.0.0.0      255.255.255.0    sw0-eth1
+    172.64.3.0   0.0.0.0      255.255.0.0      sw0-eth2
 
 Do not hardcode any IP addresses, network, or interface information.  We will be testing your code on other single-router topologies with different number of servers and clients, and different IP and network addresses.
 {: class="alert alert-info"}
