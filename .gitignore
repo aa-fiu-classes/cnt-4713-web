@@ -8,3 +8,5 @@ vendor/
 Gemfile.lock
 .DS_Store
 Thumbs.db
+.jekyll-cache/
+

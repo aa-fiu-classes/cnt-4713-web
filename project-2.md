@@ -10,9 +10,7 @@ group: "Project 2"
 
 **Revisions**
 
-- Sept 29, 2019: Submission package changes
-- Oct 11, 2019: Submission package changes
-- Nov 3, 2019: Submission requirements change (full credit for working client)
+Not yet
 
 ## Overview
 

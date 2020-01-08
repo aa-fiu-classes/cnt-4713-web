@@ -10,13 +10,13 @@ kramdown:
   toc_levels: "2,3"
 
 url: https://users.cs.fiu.edu
-baseurl: /~afanasyev/classes/fall19/CNT-4713
+baseurl: /~afanasyev/classes/spring20/CNT-4713
 
 # Configuration for permalink
 permalink: /:title.html
 
 # Configuration for site
-title: "CNT-4713: Net Centric Computing (Computer Network Fundamentals) - Fall 2019 (FIU)"
+title: "CNT-4713: Net Centric Computing (Computer Network Fundamentals) - Spring 2020 (FIU)"
 description:
 author: Alex Afanasyev
 email:
@@ -59,6 +59,6 @@ course_info:
   final_room: 
 
   projects:
-    - deadline: Week 5 (Sep 29, 2019)
-    - deadline: Week 10 (Nov 2, 2019)
-    - deadline: Week 15 (Dec 7, 2019)
+    - deadline: Week 5
+    - deadline: Week 10
+    - deadline: Week 15

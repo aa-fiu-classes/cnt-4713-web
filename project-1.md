@@ -9,7 +9,7 @@ group: "Project 1"
 
 ## Revisions
 
-- Sept 29, 2019: Submission package changes
+Not yet
 
 ## Overview
 
