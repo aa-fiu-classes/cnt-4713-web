@@ -1,14 +1,18 @@
 safe: false
 source: .
 destination: ./_site
+plugins_dir: ./_plugin
 highlighter: rouge
 markdown: kramdown
-exclude: ['CNAME', 'Gemfile', 'Gemfile.lock', 'Rakefile', 'README.md', '.sass-cache']
+exclude: ['CNAME', 'Gemfile', 'Gemfile.lock', 'Rakefile', 'README.md', '.sass-cache', '_data/google-id.json']
 sass:
   style: uncompressed
 kramdown:
   toc_levels: "2,3"
 
+plugins:
+  - jekyll-assets
+  
 url: https://users.cs.fiu.edu
 baseurl: /~afanasyev/classes/spring20/CNT-4713
 
@@ -21,12 +25,19 @@ description:
 author: Alex Afanasyev
 email:
 
+spreadsheets:
+  google_client_id: _data/google-id.json
+  spreadsheet:
+    - "1Es7CdKfKgdzTSUxaRqGNINQwIjXFLGqLXDQ6m1wnFxA"
+  
 # Configuration for navbar.html
 navbar_list:
 - name: Home
   link: /
-- name: Syllabus
+- name: Due Dates
   link: /syllabus.html
+- name: Weekly Schedule
+  link: /schedule.html
 - name: Homeworks
   link: /homeworks.html
 - name: Project 1 (Accio)

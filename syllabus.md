@@ -1,7 +1,7 @@
 ---
 layout: page
-title: Syllabus
-group: Syllabus
+title: Due Dates
+group: Due Dates
 ---
 
 {% include basic-course-info.html %}
@@ -9,6 +9,7 @@ group: Syllabus
 Refer to Canvas
 
 {% comment %}
+
 
 ## Basic Course Information
 

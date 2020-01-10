@@ -1,5 +1,5 @@
 {% assign course = site.course_info %}
-<div class="col-xs-12 col-sm-6 pull-right figure">
+<div class="col-xs-12 col-sm-12">
   <table class="table table-striped table-hover table-bordered">
     <!-- <tr>
          <td><b>Lectures</b></td>
@@ -31,28 +31,28 @@
          {% endfor %}
          </td>
          </tr> -->
-    <tr>
-      <td><b>Midterm</b></td>
-      <td>{{ course.midterm }}, <b>{{ course.room }}</b></td>
-    </tr>
-    <tr>
-      <td><b>Final</b></td>
-      <td>{{ course.final }}, <b>{{ course.final_room }}</b></td>
-    </tr>
-    <!-- <tr>
-         <td><b>Homeworks due</b></td>
-         <td>{{ course.homeworks_due }}</td>
-         </tr> -->
+
+    {% for item in site.data.spreadsheets.schedule %}
+      {% if item.exams != "" %}
+        <tr>
+          <td><b>{{ item.exams }}</b></td>
+          <td>Week {{ item.week }} ({{ item.to | date: "%s" | minus: 1 | date: "%c" }} EDT)</td>
+        </tr>
+      {% endif %}
+    {% endfor %}
+    
     {% if course.homeworks %}
       <tr>
         <td>Homeworks</td>
         <td>
           <table class="table table-striped table-hover table-bordered">
-            {% for project in course.homeworks %}
+            {% for item in site.data.spreadsheets.schedule %}
+              {% if item.homeworks != "" %}
               <tr>
-                <td><b>Homework {{ forloop.index }} due</b></td>
-                <td>{{ project.deadline }}</td>
+                <td><b>{{ item.homeworks }}</b></td>
+                <td>Week {{ item.week }} ({{ item.to | date: "%s" | plus: 86399 | date: "%c" }} EDT)</td>
               </tr>
+              {% endif %}
             {% endfor %}
           </table>
         </td>
@@ -65,13 +65,34 @@
           <table class="table table-striped table-hover table-bordered">
             {% for project in course.projects %}
               <tr>
-                <td><b>Project {{ forloop.index }} due</b></td>
-                <td>{{ project.deadline }}</td>
+                <td><b>Project {{ forloop.index }}</b></td>
+                {% assign projectNo = "Project " | append: forloop.index %}
+                <td>{% for item in site.data.spreadsheets.schedule %}
+                  {% if item.projects == projectNo %}
+                    Week {{ item.week }} ({{ item.to | date: "%s" | minus: 1 | date: "%c" }} EDT)
+                  {% endif %}
+                {% endfor %}
+                </td>
               </tr>
             {% endfor %}
           </table>
         </td>
       </tr>
     {% endif %}
+      <tr>
+        <td>In-Lecture Questions</td>
+        <td>
+          <table class="table table-striped table-hover table-bordered">
+            {% for item in site.data.spreadsheets.schedule %}
+              {% if item.lectures != "" %}
+              <tr>
+                <td><b>{{ item.lectures }}</b></td>
+                <td>Week {{ item.week }} ({{ item.to | date: "%s" | minus: 1 | date: "%c" }} EDT)</td>
+              </tr>
+              {% endif %}
+            {% endfor %}
+          </table>
+        </td>
+      </tr>
   </table>
 </div>
