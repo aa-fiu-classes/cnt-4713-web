@@ -77,13 +77,15 @@ Both client and server must implement reliable data transfer using unreliable UD
 
 - The maximum UDP packet size is `524 bytes` including a header (`512 bytes` for the payload)
 
-- The maximum sequence and acknowledgment number should be `102400` and be reset to zero whenever it reaches the maximum value.
+- The maximum sequence and acknowledgment number should be `204800` and be reset to zero whenever it reaches the maximum value.
 
 - Packet retransmission (and appropriate congestion control actions) should be triggered when no data was acknowledged for more than `0.5 seconds` (fixed retransmission timeout).
 
-- Initial and minimum congestion window size (`CWND`) should be `512`
+- Initial and minimum congestion window size (`CWND`) should be `1024`
 
-- Initial slow-start threshold (`SS-THRESH`) should be `10000`
+- Initial slow-start threshold (`SS-THRESH`) should be `15000`
+
+- Initial sequence number should be `42`
 
 - If `ACK` field is not set, `Acknowledgment Number` field should be set to 0
 
