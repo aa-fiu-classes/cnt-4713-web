@@ -316,7 +316,7 @@ This error is especially baffling because it can sometimes occur for some test c
 
 ### Emulating packet loss
 
-If are using the [Vagrantfile provided in project-2 skeleton](https://github.com/aa-fiu-classes/fall19-project2), you can automatically instantiate two virtual machines that are connected to each other using a private network (`eth1` interface on each).  You can also run preinstalled `/set-loss.sh` script to enable emulation of 10% loss and delay of 20ms in each direction (need to run on each VM separately).
+If are using the [Vagrantfile provided in project-2 skeleton](https://github.com/aa-fiu-classes/spring20-project2), you can automatically instantiate two virtual machines that are connected to each other using a private network (`eth1` interface on each).  You can also run preinstalled `/set-loss.sh` script to enable emulation of 10% loss and delay of 20ms in each direction (need to run on each VM separately).
 
 You can use the following commands to adjust parameters of the emulation:
 
@@ -365,7 +365,7 @@ You can easily create an image in your favourite virtualization engine (VirtualB
 
   * Clone project template
 
-        git clone https://github.com/aa-fiu-classes/fall19-project2 ~/cnt4713-proj2
+        git clone https://github.com/aa-fiu-classes/spring20-project2 ~/cnt4713-proj2
         cd ~/cnt4713-proj2
 
   * Initialize VMs, one to run the client app and the other to run the server app
@@ -424,9 +424,9 @@ You can easily create an image in your favourite virtualization engine (VirtualB
 
 ## Submission Requirements
 
-To submit your project, you need to prepare:
+To submit your project:
 
-1. A `README.md` file placed in your code that includes:
+1. Create a `README.md` file placed in your code that includes:
 
     * Name and UID of each team member (up to 3 members in one team) and the contribution of each member
     * The high level design of your server and client
@@ -436,12 +436,9 @@ To submit your project, you need to prepare:
 
     **If you need additional dependencies for your project, you must update Vagrant file.**
 
-1. Submit all your source code (`client.py`, `server.py`, and any other Python files you have created) and `README.md` to Gradescope.
+2. Submit to Gradescope via connection to Github. Your repository should include all your source code (`client.py`, `server.py`, and any other Python files you have created) and `README.md`. Make sure you do NOT include temporary files (deductions will be made if so).
 
-Note, compared to project 1, you do not need to submit `.tar.gz` file or any other non-source code or README files.
-
-Before submission, please make sure that the client and server conforms to the specification.
-DO NOT implement parts that are not defined in the specification or you may not pass the automated tests.
+Before submission, please make sure the client and server conforms to the specification and you did not implement what implementation does not require.
 
 Submissions that do not follow these requirements will not get any credit.
 {: class="bs-callout bs-callout-warning" }

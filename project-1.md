@@ -126,7 +126,7 @@ You can easily create an image in your favourite virtualization engine (VirtualB
 
   * Clone project template
 
-        git clone https://github.com/aa-fiu-classes/fall19-project1 ~/cnt4713-proj1
+        git clone https://github.com/aa-fiu-classes/spring20-project1 ~/cnt4713-proj1
         cd ~/cnt4713-proj1
 
   * Initialize VM
@@ -160,36 +160,19 @@ You can easily create an image in your favourite virtualization engine (VirtualB
 
 ## Submission Requirements
 
-To submit your project, you need to prepare:
+To submit your project:
 
-1. A `README.md` file placed in your code that includes:
+1. Create a `README.md` file placed in your code that includes:
 
-    * Your name, Panther ID
-    * The high level design of your server and client
     * The problems you ran into and how you solved the problems
-    * List of any additional python modules used
+    * List of any additional libraries used
     * Acknowledgement of any online tutorials or code example (except class website) you have been using.
 
-1. All your source code, `README.md`, `Vagrantfile`, and `.git` folder with your git repository history as a `.tar.gz` archive (and any files from extra credit part).
+    **If you need additional dependencies for your project, you must update Vagrant file.**
 
-    To create the submission, **use the provided Makefile** in the skeleton project.  Just update `Makefile` to include your Panther ID and then just type
+2. Submit to Gradescope via connection to Github. Your repository should include all your source code (`client.py`, `server.py`, and any other Python files you have created) and `README.md`. Make sure you do NOT include temporary files (deductions will be made if so).
 
-        make tarball
-
-    Then submit the resulting archive to Gradescope.
-
-Before submission, please make sure:
-
-1. Client and server conforms to the specification
-1. `.tar.gz` archive does not contain temporary or other unnecessary files.  We will automatically deduct points otherwise.
-
----
-
-**NEW** You will need to submit to Gradescope `.tar.gz` file and **SEPARATELY** your `README.md`, `client.py`, `server.py`, and any other Python files you have created.
-These must be the exact copies of ones included in the `.tar.gz` file.
-{: class="bs-callout bs-callout-warning" }
-
----
+Before submission, please make sure the client and server conforms to the specification and you did not implement what implementation does not require.
 
 Submissions that do not follow these requirements will not get any credit.
 {: class="bs-callout bs-callout-warning" }

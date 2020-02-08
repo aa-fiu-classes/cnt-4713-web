@@ -537,7 +537,7 @@ For this project you should use the provided Vagrant environment, as it installs
 1. Clone project template
 
     ```bash
-    git clone https://github.com/aa-fiu-classes/fall19-project3 ~/cnt4713-proj3
+    git clone https://github.com/aa-fiu-classes/spring20-project3 ~/cnt4713-proj3
     cd ~/cnt4713-proj3
     ```
 
@@ -773,9 +773,9 @@ Obviously, this is a very simplified version of the forwarding process, and the 
 
 ## Submission Requirements
 
-To submit your project, you need to prepare:
+To submit your project:
 
-1. A `README.md` file placed in your code that includes:
+1. Create a `README.md` file placed in your code that includes:
 
     * Name and UID of each team member (up to 3 members in one team) and the contribution of each member
     * The high level design of your implementation
@@ -784,6 +784,8 @@ To submit your project, you need to prepare:
     * Acknowledgement of any online tutorials or code example (except class website) you have been using.
 
 2. Submit to Gradescope via connection to Github. Do not submit individual files or .zip file, as it will most likely result in grading failures.
+
+Before submission, please make sure the client and server conforms to the specification and you did not implement what implementation does not require.
 
 Submissions that do not follow these requirements will not get any credit.
 {: class="bs-callout bs-callout-warning" }
