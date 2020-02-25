@@ -32,10 +32,10 @@ You are encouraged to host your code in private repositories on [GitHub](https:/
 
 The project contains two parts: a server and a client.
 
-- The server opens UDP socket and implements incoming connection management from clients.  For each of the connection, the server saves all the received data from the client in a file.
 - The client opens UDP socket, implements outgoing connection management, and connects to the server.  Once connection is established, it sends the content of a file to the server.
+- (extra credit) The server opens UDP socket and implements incoming connection management from clients.  For each of the connection, the server saves all the received data from the client in a file.  An online version of the server will be provided to test your client.
 
-Both client and server must implement reliable data transfer using unreliable UDP transport, including data sequencing, cumulative acknowledgements, and basic version of the congestion control.
+Both client (and server) must implement reliable data transfer using unreliable UDP transport, including data sequencing, cumulative acknowledgements, and basic version of the congestion control.
 
 ### Confundo Protocol Specification
 
@@ -92,73 +92,6 @@ Both client and server must implement reliable data transfer using unreliable UD
 - `FIN` should take logically one byte of the data stream (same as in TCP, see examples)
 
 - `FIN` and `FIN | ACK` packets must not carry any payload
-
-### Server Application Specification
-
-The server application MUST be written in `server.py` file (you can create additional `.py` files and modules), accepting two command-line arguments:
-
-    $ python3 ./server.py <PORT> <FILE-DIR>
-
-- `<PORT>`: port number on which server will "listen" on connections (expects UDP packets to be received).  The server must accept connections coming from any interface.
-- `<FILE-DIR>`: directory name where to save the received files.
-
-For example, the command below should start the server listening on port `5000` and saving received files in the directory `/save`.
-
-    $ python3 ./server.py 5000 /save
-
-**Requirements**
-
-- The server must open a UDP socket on the specified port number
-
-- The server should gracefully process incorrect port number and exit with a non-zero error code (you can assume that the folder is always correct).  In addition to exit, the server must print out on standard error (using `sys.stderr.write()`) an error message that starts with `ERROR:` string.
-
-- The server should exit with code zero when receiving `SIGQUIT`/`SIGTERM` signal
-
-- The server must count all established connections (1 for the first connect, 2 for the second, etc.).  The received file over the connection must be saved to `<FILE-DIR>/<CONNECTION-ID>.file` file  (e.g., `/save/1.file`, `/save/2.file`, etc.).  If the client doesn't send any data during gracefully terminated connection, the server should create an empty file with the name that corresponds to the connection number.
-
-- The server should be able to accept and process multiple connection from clients at the same time
-
-   * After receiving packet with `SYN` flag, the server should create state for the `connection ID` and proceed with 3-way handshake for this connection.  Server should use `4321` as initial sequence number.
-
-   * After receiving packet without `SYN` flag, the server should lookup the connection using `connection ID` and proceed with appropriate action for the connection.
-
-              Client1                                  Server
-                |                                        |
-                |      seq=12345, ack=0, id=0, SYN       |
-                | -------------------------------------> |
-                |   seq=4321, ack=12346, id=1, SYN, ACK  |
-                | <------------------------------------- |
-                |                                        |
-                |                                        |
-                |    seq=12346, ack=4322, id=1, ACK      |
-                | -------------------------------------> |
-                |       (if no payload included)         |
-                |                                        |
-               ...                                      ...
-                |                                        |                                  Client2
-                |                                        |                                     |
-                |                                        |     seq=12345, ack=0, id=0, SYN     |
-                |                                        | <---------------------------------- |
-                |                                        | sec=4321, ack=12346, id=2, SYN, ACK |
-                |                                        | ----------------------------------> |
-                |                                        |                                     |
-                |                                        |   seq=12346, ack=4322, id=2, ACK    |
-                |                                        | <---------------------------------- |
-                |                                        |    (if includes 512-byte payload)   |
-                |                                        |                                     |
-                |                                        |   sec=4322, ack=12858, id=2, ACK    |
-                |                                        | ----------------------------------> |
-                |                                       ...                                   ...
-                |                                        |       seq=12858, ack=0, id=2        |
-                |                                        | <---------------------------------- |
-                |                                        |   sec=4322, ack=13370, id=2, ACK    |
-                |                                        | ----------------------------------> |
-                |                                       ...                                   ...
-                |                                        |                                     |
-
-- The server must assume an error if no data is received from the client for over 10 seconds.  It should abort the connection and write a single `ERROR` string into the corresponding file.
-
-- The server should be able to accept and save files up to 100 MiB.  **This requirement in no way implies that your client should not support larger files! It just ensures to ensure that you considered large files that may not fit in RAM.**
 
 ### Client Application Specification
 
@@ -234,6 +167,73 @@ For example, the command below should result in connection to a server on the sa
 - Client should support transfer of files that are up to `100 MiB`. **This requirement in no way implies that your client should not support larger files! It just ensures to ensure that you considered large files that may not fit in RAM.**
 
 - Whenever client receives no packets from server for more than `10 seconds`, it should abort the connection (close socket and exit with non-zero code)
+
+### (Extra credit) Server Application Specification
+
+The server application MUST be written in `server.py` file (you can create additional `.py` files and modules), accepting two command-line arguments:
+
+    $ python3 ./server.py <PORT> <FILE-DIR>
+
+- `<PORT>`: port number on which server will "listen" on connections (expects UDP packets to be received).  The server must accept connections coming from any interface.
+- `<FILE-DIR>`: directory name where to save the received files.
+
+For example, the command below should start the server listening on port `5000` and saving received files in the directory `/save`.
+
+    $ python3 ./server.py 5000 /save
+
+**Requirements**
+
+- The server must open a UDP socket on the specified port number
+
+- The server should gracefully process incorrect port number and exit with a non-zero error code (you can assume that the folder is always correct).  In addition to exit, the server must print out on standard error (using `sys.stderr.write()`) an error message that starts with `ERROR:` string.
+
+- The server should exit with code zero when receiving `SIGQUIT`/`SIGTERM` signal
+
+- The server must count all established connections (1 for the first connect, 2 for the second, etc.).  The received file over the connection must be saved to `<FILE-DIR>/<CONNECTION-ID>.file` file  (e.g., `/save/1.file`, `/save/2.file`, etc.).  If the client doesn't send any data during gracefully terminated connection, the server should create an empty file with the name that corresponds to the connection number.
+
+- The server should be able to accept and process multiple connection from clients at the same time
+
+   * After receiving packet with `SYN` flag, the server should create state for the `connection ID` and proceed with 3-way handshake for this connection.  Server should use `4321` as initial sequence number.
+
+   * After receiving packet without `SYN` flag, the server should lookup the connection using `connection ID` and proceed with appropriate action for the connection.
+
+              Client1                                  Server
+                |                                        |
+                |      seq=12345, ack=0, id=0, SYN       |
+                | -------------------------------------> |
+                |   seq=4321, ack=12346, id=1, SYN, ACK  |
+                | <------------------------------------- |
+                |                                        |
+                |                                        |
+                |    seq=12346, ack=4322, id=1, ACK      |
+                | -------------------------------------> |
+                |       (if no payload included)         |
+                |                                        |
+               ...                                      ...
+                |                                        |                                  Client2
+                |                                        |                                     |
+                |                                        |     seq=12345, ack=0, id=0, SYN     |
+                |                                        | <---------------------------------- |
+                |                                        | sec=4321, ack=12346, id=2, SYN, ACK |
+                |                                        | ----------------------------------> |
+                |                                        |                                     |
+                |                                        |   seq=12346, ack=4322, id=2, ACK    |
+                |                                        | <---------------------------------- |
+                |                                        |    (if includes 512-byte payload)   |
+                |                                        |                                     |
+                |                                        |   sec=4322, ack=12858, id=2, ACK    |
+                |                                        | ----------------------------------> |
+                |                                       ...                                   ...
+                |                                        |       seq=12858, ack=0, id=2        |
+                |                                        | <---------------------------------- |
+                |                                        |   sec=4322, ack=13370, id=2, ACK    |
+                |                                        | ----------------------------------> |
+                |                                       ...                                   ...
+                |                                        |                                     |
+
+- The server must assume an error if no data is received from the client for over 10 seconds.  It should abort the connection and write a single `ERROR` string into the corresponding file.
+
+- The server should be able to accept and save files up to 100 MiB.  **This requirement in no way implies that your client should not support larger files! It just ensures to ensure that you considered large files that may not fit in RAM.**
 
 ### Congestion Control Requirements
 
