@@ -111,7 +111,7 @@ For example, the command below should result in connection to a server on the sa
 
 - The client must open a UDP socket and initiate 3-way handshake to the specified hostname/ip and port
 
-  * Send UDP packet `src-ip=DEFAULT, src-port=DEFAULT, dst-ip=HOSTNAME-OR-IP, dst-port=PORT` with `SYN` flag set, `Connection ID` initialized to `0`, `Sequence Number` set to `12345`, and `Acknowledgement Number` set to `0`
+  * Send UDP packet `src-ip=DEFAULT, src-port=DEFAULT, dst-ip=HOSTNAME-OR-IP, dst-port=PORT` with `SYN` flag set, `Connection ID` initialized to `0`, `Sequence Number` set to `42`, and `Acknowledgement Number` set to `0`
 
   * Expect response from server with `SYN | ACK` flags.  The client must record the returned `Connection ID` and use it in all subsequent packets.
 
@@ -199,34 +199,34 @@ For example, the command below should start the server listening on port `5000` 
 
               Client1                                  Server
                 |                                        |
-                |      seq=12345, ack=0, id=0, SYN       |
+                |      seq=42, ack=0, id=0, SYN          |
                 | -------------------------------------> |
-                |   seq=4321, ack=12346, id=1, SYN, ACK  |
+                |   seq=4321, ack=43, id=1, SYN, ACK     |
                 | <------------------------------------- |
                 |                                        |
                 |                                        |
-                |    seq=12346, ack=4322, id=1, ACK      |
+                |    seq=43, ack=4322, id=1, ACK         |
                 | -------------------------------------> |
                 |       (if no payload included)         |
                 |                                        |
                ...                                      ...
                 |                                        |                                  Client2
                 |                                        |                                     |
-                |                                        |     seq=12345, ack=0, id=0, SYN     |
+                |                                        |     seq=42, ack=0, id=0, SYN        |
                 |                                        | <---------------------------------- |
-                |                                        | sec=4321, ack=12346, id=2, SYN, ACK |
+                |                                        | sec=4321, ack=43, id=2, SYN, ACK    |
                 |                                        | ----------------------------------> |
                 |                                        |                                     |
-                |                                        |   seq=12346, ack=4322, id=2, ACK    |
+                |                                        |   seq=43, ack=4322, id=2, ACK       |
                 |                                        | <---------------------------------- |
                 |                                        |    (if includes 512-byte payload)   |
                 |                                        |                                     |
-                |                                        |   sec=4322, ack=12858, id=2, ACK    |
+                |                                        |   sec=4322, ack=555, id=2, ACK      |
                 |                                        | ----------------------------------> |
                 |                                       ...                                   ...
-                |                                        |       seq=12858, ack=0, id=2        |
+                |                                        |       seq=555, ack=0, id=2          |
                 |                                        | <---------------------------------- |
-                |                                        |   sec=4322, ack=13370, id=2, ACK    |
+                |                                        |   sec=4322, ack=1067, id=2, ACK     |
                 |                                        | ----------------------------------> |
                 |                                       ...                                   ...
                 |                                        |                                     |
