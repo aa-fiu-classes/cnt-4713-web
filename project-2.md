@@ -247,7 +247,7 @@ Client and server (mostly client) is required to implement TCP Tahoe congestion 
 
   * (*Congestion Avoidance*) If `CWND >= SS-THRESH`: `CWND` += (512 * 512) / CWND
 
-- After timeout, set `SS-THRESH -> CWND / 2`, `CWND -> 512`, and retransmit data after the last acknowledged byte.
+- After timeout, set `SS-THRESH -> CWND / 2`, `CWND -> 1024`, and retransmit data after the last acknowledged byte.
 
 - For each valid packet of the connection (except packets with only `ACK` flag and empty payload), the server responds with an `ACK` packet, which includes the next expected in-sequence byte to receive (cumulative acknowledgement).
 
