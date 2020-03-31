@@ -571,7 +571,7 @@ To run your router, you will need to run in parallel two commands: Mininet proce
     vagrant ssh #  or   vagrant ssh -- -Y
 
     cd /vagrant
-    sudo ./run.py # must be run as superuser
+    sudo python ./run.py # must be run as superuser
     ...
     mininet>
     ```
