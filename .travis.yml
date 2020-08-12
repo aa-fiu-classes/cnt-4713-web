@@ -12,4 +12,4 @@ after_success:
   - ssh-keyscan -H $HOSTNAME 2>&1 | tee -a $HOME/.ssh/known_hosts
   - openssl aes-256-cbc -K $encrypted_2149da459c1c_key -iv $encrypted_2149da459c1c_iv -in .travis.d/id-rsa.enc -out .travis.d/id-rsa -d
   - mkdir -p ~/.ssh && mv .travis.d/id-rsa ~/.ssh/id_rsa && chmod 600 ~/.ssh/id_rsa
-  - rsync -arv --progress --delete _site/ $USERNAME@$HOSTNAME:www/classes/spring20/CNT-4713/
+  - rsync -arv --progress --delete _site/ $USERNAME@$HOSTNAME:www/classes/fall20/CNT-4713/

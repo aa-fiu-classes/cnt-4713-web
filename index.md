@@ -1,6 +1,6 @@
 ---
 layout: page
-title: CNT-4713 - Spring 2020 (FIU)
+title: CNT-4713 - Fall 2020 (FIU)
 group: Home
 ---
 
