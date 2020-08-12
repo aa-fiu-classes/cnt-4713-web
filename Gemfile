@@ -11,4 +11,5 @@ group :jekyll_plugins do
   gem 'bootstrap-sass', '~> 3.4', '>= 3.4.1'
   gem 'font-awesome-sass', '~> 5.9'
   gem 'google_drive', '~> 3.0', '>= 3.0.3'
+  gem 'kramdown-parser-gfm', '~> 1.1'
 end
