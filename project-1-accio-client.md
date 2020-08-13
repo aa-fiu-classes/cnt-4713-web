@@ -16,7 +16,7 @@ Not yet
 
 The client application MUST be implemented in `client.py` file, accepting three command-line arguments:
 
-    $ ./client.py <HOSTNAME-OR-IP> <PORT> <FILENAME>
+    $ python3 client.py <HOSTNAME-OR-IP> <PORT> <FILENAME>
 
 - `<HOSTNAME-OR-IP>`: hostname or IP address of the server to connect
 - `<PORT>`: port number of the server to connect
@@ -24,7 +24,7 @@ The client application MUST be implemented in `client.py` file, accepting three 
 
 For example, the command below should result in connection to a server on the same machine listening on port 5000 and transfer content of `file.txt`:
 
-    $ ./client.py localhost 5000 file.txt
+    $ python3 client.py localhost 5000 file.txt
 
 **Requirements**:
 
@@ -77,3 +77,31 @@ For example, the command below should result in connection to a server on the sa
 
     * To test 10 second disconnection handling, use the "broken" demo server
 
+## Submission Requirements
+
+Refer to [Project 1 submission requirements](project-1.html#Genreral-Submission-Requirements)
+
+## Grading
+
+Your code will then be automatically tested in some testing scenarios.
+
+Note that your implementation will be tested against a reference implementation. Projects receive full credit if only all these checks are passed.
+
+### Grading Criteria
+
+Maximum points: 100
+
+1. (5 pts) At least 3 git commits
+1. (5 pts) Client properly handles command line arguments
+1. (5 pts) Client handles invalid hostname/port (you only need to properly handle the exceptions)
+1. (10 pts) Client successfully connects to a live remote server
+1. (5 pts) Client fails to connect to a non-functioning remote server
+1. (10 pts) Client waits no more than 10 seconds to fail to connect to a non-functioning remote server
+1. (10 pts) Client starts transmitting **after** receiving the command
+1. (10 pts) Client aborts connection when server gets disconnected (server app or network connection is down) for more than 10 seconds
+1. (10 pts) Client successfully transmits a small file (~500 bytes) without emulated delays and/or transmission errors
+1. (10 pts) Client successfully transmits a small file (~500 bytes) **with** emulated delays and/or transmission errors
+1. (10 pts) Client successfully transmits a large size file (~10 MiB) without emulated delays and/or transmission errors
+1. (10 pts) Client successfully transmits a large size file (~10 MiB) **with** emulated delays and/or transmission errors
+
+Note that you may receive deductions if your repository contains temporary files or your submission is lacking the required README file.

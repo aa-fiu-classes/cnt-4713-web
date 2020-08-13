@@ -4,8 +4,11 @@ title: "Project 1: \"Accio\" File using TCP"
 group: "Project 1"
 ---
 
+{% asset accio.png class="col-md-6 pull-right" style="max-width:100%" %}
+
 * toc
 {:toc}
+
 
 ## Revisions
 
@@ -33,17 +36,17 @@ Note: You are encouraged to host your code in private repositories on [GitHub](h
 
 ## Tasks Description
 
-The project is split into three (non-equal) progressive parts with their individual deadlines:
+The project is split into three progressive parts with their individual deadlines:
 
-- [Accio Client](project-1-accio-client.html)
-- [Accio Server Simplified](project-1-accio-server-simplified.html)
-- [Accio Server](project-1-accio-server.html)
+- [Part 1: Accio Client](project-1-accio-client.html)
+- [Part 2: Accio Server Simplified](project-1-accio-server-simplified.html)
+- [Part 3: Accio Server](project-1-accio-server.html)
 
 ## Environment Setup
 
-The best way to guarantee full credit for the project is to do project development using a Ubuntu 16.04-based virtual machine.
+To successfully finish the project you can use any platform that can run Python3.  However, as a general practice and ability to test your implementation under emulated network conditions, it is highly recommended that you use the provided Ubuntu 18.04 based environment.
 
-You can easily create an image in your favourite virtualization engine (VirtualBox, VMware) using the Vagrant platform and steps outlined below.
+You can easily create an image in your favourite virtualization engine (e.g., VirtualBox) using the Vagrant platform and steps outlined below.
 
 ### Set Up Vagrant and Create VM Instance
 
@@ -57,7 +60,7 @@ You can easily create an image in your favourite virtualization engine (VirtualB
 
   * Clone project template
 
-        git clone https://github.com/aa-fiu-classes/spring20-project1 ~/cnt4713-proj1
+        git clone https://github.com/aa-fiu-classes/fall20-project1 ~/cnt4713-proj1
         cd ~/cnt4713-proj1
 
   * Initialize VM
@@ -87,69 +90,47 @@ You can easily create an image in your favourite virtualization engine (VirtualB
 
 * If you are using Windows, read [this article](http://www.sitepoint.com/getting-started-vagrant-windows/) to help yourself set up the environment.
 
-* You are now free to add more files and modify the Makefile to make the `server.py` and `client.py` full-fledged implementation.
+* You are now free to add more files to make the `server.py` and `client.py` full-fledged implementation.
 
-## Submission Requirements
+## General Submission Requirements
+
+Submissions for three parts of the project must be cumulative, e.g., part 2 should include everything from part 1 and part 3 should include everything from parts 1 and 2.
+{: class="bs-callout bs-callout-warning" }
 
 To submit your project:
 
 1. Create a `README.md` file placed in your code that includes:
 
-    * The problems you ran into and how you solved the problems
-    * List of any additional libraries used
+    * The problems you ran into and how you solved the problems (this can be cumulative across the submission, i.e., you add more as you proceed with parts)
     * Acknowledgement of any online tutorials or code example (except class website) you have been using.
 
-    **If you need additional dependencies for your project, you must update Vagrant file.**
-
-2. Submit to Gradescope via connection to Github. Your repository should include all your source code (`client.py`, `server.py`, and any other Python files you have created) and `README.md`. Make sure you do NOT include temporary files (deductions will be made if so).
+2. Submit to Gradescope via connection to Github. Your repository should include all your source code (`client.py`, `server-s.py`, `server.py`, and any other Python files you have created) and `README.md`. Make sure you do NOT include temporary files (deductions will be made if so).
 
 Before submission, please make sure the client and server conforms to the specification and you did not implement what implementation does not require.
 
 Submissions that do not follow these requirements will not get any credit.
 {: class="bs-callout bs-callout-warning" }
 
-## Grading
+## General Grading Policy
 
-Your code will be first checked by a software plagiarism detecting tool. If we find any plagiarism, you will not get any credit.
+Your code will be first checked by a software plagiarism detecting tool.
+If we find any plagiarism, you will not get any credit.
 
 Your code will then be automatically tested in some testing scenarios.
 
 Note that your implementation will be tested against a reference implementation. Projects receive full credit if only all these checks are passed.
 
-### Grading Criteria
+## Late Submission Policy
 
-1. (2.5 pts) At least 3 git commits
-1. (2.5 pts) Client handles incorrect hostname/port
-1. (2.5 pts) Server handles incorrect port
-1. (2.5 pts) Server handles `SIGTERM` / `SIGQUIT` signals
-1. (5 pts) Client connects and starts transmitting a file
-1. (5 pts) Server accepts a connection and start saving a file
-1. (5 pts) Client able to successfully transmit a small file (500 bytes)
-1. (5 pts) Client able to successfully transmit a medium size file (1 MiB)
-   * sending in large chunks without delays
-1. (5 pts) Client able to successfully transmit a large size file (100 MiB)
-   * sending in large chunks without delays
-1. (5 pts) Server able to receive a small file (500 bytes) and save it in `1.file`
-1. (15 pts) Server able to receive a medium file (1 MiB bytes) and save it in `1.file`
-   * (5 pts) receiving file sent in large chunks without delays
-   * (10 pts) receiving file sent in small chunks with delays
-1. (15 pts) Server able to receive a large file (100 MiB bytes) and save it in `1.file`
-   * (5 pts) receiving file sent in large chunks without delays
-   * (10 pts) receiving file sent in small chunks with delays
-1. (10 pts, 1 public and 1 private test) Server can properly receive 10 small files (sent without delays) in `1.file`, `2.file`, ... `10.file`
-   * a single client connects sequentially
-   * 10 clients connect simultaneously (our test will ensure proper ordering of connections)
-1. (5 pts) Client aborts connection attempt after 10 seconds.
-1. (5 pts) Client aborts connection when server gets disconnected (server app or network connection is down)
-1. (5 pts) Server aborts connection (a file should be created, containing only `ERROR` string) when it does not receive data from client for more than 10 seconds.
-1. (5 pts) Client is able to successfully send and server properly receive and save large file over lossy and large delay network (we will use `tc` based emulation).
+Part 1 and Part 2 can be submitted up until deadline for the Part 3.
+However, if Part 1 and/or Part 2 are submitted after Part 1 and Part 2 deadlines, the corresponding grade is subject to **20% penalty**.
 
-
-### Grading Hint
+## Overall Grading Hint
 
 - If you see 100% load on your CPU when you running your client/server, it is an indication that something is wrong and test script will legitimately (but randomly) fail.
 
+## Deductions
 
-### Deductions
+- (-5 pts) The submission contains temporary or other non-source code file, except `README.md`, `Vagrantfile`, `.gitignore` and other necessary files.
 
-1. (-5 pts) The submission archive contains temporary or other non-source code file, except `README.md`, `Vagrantfile`, files under `.git` subfolder.
+- (-5 pts) The submission does not contain README.md with the required content.

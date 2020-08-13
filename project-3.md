@@ -4,9 +4,8 @@ title: "Project 3: Build Your Own Router"
 group: "Project 3"
 ---
 
-<div class="row" markdown="1">
-<div class="col-md-12" markdown="1">
-<img src="{{ site.baseurl }}/images/covfefe.jpg" class="col-md-6 pull-right" style="max-width: 286px" />
+
+{% asset riddikulus.jpg class="col-md-6 pull-right" style="max-width:100%" %}
 
 * toc
 {:toc}
@@ -27,9 +26,6 @@ You are required to use `git` to track the progress of your work. **The project 
 
 You are encouraged to host your code in private repositories on [GitHub](https://github.com/), [GitLab](https://gitlab.com), or other places.  At the same time, you are PROHIBITED to make your code for the class project public during the class or any time after the class.  If you do so, you will be violating academic honestly policy that you have signed, as well as the student code of conduct and be subject to serious sanctions.
 {: class="alert alert-warning"}
-
-</div>
-</div>
 
 ## Task Description
 
@@ -537,7 +533,7 @@ For this project you should use the provided Vagrant environment, as it installs
 1. Clone project template
 
     ```bash
-    git clone https://github.com/aa-fiu-classes/spring20-project3 ~/cnt4713-proj3
+    git clone https://github.com/aa-fiu-classes/fall20-project3 ~/cnt4713-proj3
     cd ~/cnt4713-proj3
     ```
 

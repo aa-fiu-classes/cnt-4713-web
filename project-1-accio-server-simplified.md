@@ -14,25 +14,29 @@ Not yet
 
 ## Simplified Server Specification
 
-The server application MUST be implemented in `server.py` Python file, accepting two command-line arguments:
+The server application MUST be implemented in `server-s.py` Python file, accepting two command-line arguments:
 
-    $ ./server.py <PORT>
+    $ python3 server-s.py <PORT>
 
 - `<PORT>`: port number on which server will listen on connections.  The server must accept connections coming from any interface.
 
-For example, the command below should start the server listening on port `5000` and saving received files in the directory `/save`.
+For example, the command below should start the server listening on port `5000`.
 
-    $ ./server.py 5000
+    $ python3 server.py 5000
 
 **Requirements**:
 
-- The server must open a listening socket on the specified in the command line port number on all interfaces. In order to do that, you should hard-code `0.0.0.0` as a host/ip in `socket.bind` method.
+- The server must open a listening socket on the specified in the command line port number on all interfaces. In order to do that, you should hard-code `0.0.0.0` as a host/IP in `socket.bind` method.
 
 - The server should gracefully process an incorrect port number and exit with a non-zero error code.  In addition to exit, the server must print out on standard error (using `sys.stderr.write()`) an error message that starts with `ERROR:` string.
 
 - The server should exit with code zero when receiving `SIGQUIT`, `SIGTERM`, `SIGINT` signal
 
 - The server should be able to accept multiple connections sequentially (i.e., accept one connection, process it, close connection; accept another one, etc.)
+
+- The server should be able to handle up toe 10 simultaneous connections in a graceful fashion: not rejecting next connection, but processing it as soon as done with the previous one
+
+  * To test, you can `telnet` to your server from multiple consoles.  None should be rejected, but only one should display `accio` command at a time.  As soon as you done with one telnet session, `accio` should appear in another console.
 
 - The server must assume an error if no data received from the client for over `10 seconds`.  It should abort the connection and write a single `ERROR` string instead of number of bytes read.
 
@@ -59,6 +63,8 @@ For example, the command below should start the server listening on port `5000` 
 
     * To test, you can use your client or `telnet` application.  For example, `telnet localhost port`.  If your server correctly accepted connection, telnet should indicate that.  If not, it will be stuck in "Connecting..." stage.
 
+    * Note that to satisfy one of the requirement, you need to use appropriate value for `socket.listen`
+
 - Add routines to send `accio\r\n` after connection established
 
     * To test, use telnet again.  You should see `accio` appearing after you connected to the server.
@@ -70,3 +76,42 @@ For example, the command below should start the server listening on port `5000` 
 - Add routine to print out the amount of received data just after connection is terminated.
 
 - Ensure that the server can accept another connection after it is done with the first one.
+
+
+## Submission Requirements
+
+Refer to [Project 1 submission requirements](project-1.html#Genreral-Submission-Requirements)
+
+## Grading
+
+Your code will then be automatically tested in some testing scenarios.
+
+Note that your implementation will be tested against a reference implementation. Projects receive full credit if only all these checks are passed.
+
+### Grading Criteria
+
+Maximum points: 100
+
+1. (5 pts) At least 3 new git commits
+1. (5 pts) Server handles incorrect port
+1. (5 pts) Server **gracefully** handles `SIGINT` signal
+1. (5 pts) Server accepts a connection
+1. (5 pts) Server accepts a connection and sends `accio\r\n` command
+1. (5 pts) Server starts receiving data
+1. (5 pts) Server accepts another connection after the first connection finished
+1. (5 pts) When server receives 10 connections simultaneously, it accepts and process them sequentially without rejecting
+1. (5 pts) Server aborts connection and prints ERROR when it does not receive data from client for more than 10 seconds.
+1. (5 pts) Server accepts another connection after the first connection timed out
+1. (5 pts) Server successfully receives a small amount of data (~500 bytes) using the submitted version of the client (from part 1)
+1. (5 pts) Server prints the correct value for the received data from the previous test
+1. (5 pts) Server successfully receives a small amount of data (~500 bytes) using the instructor's version of the client
+1. (5 pts) Server prints the correct value for the received data from the previous test
+1. (5 pts) Server successfully receives a large amount of data (~10 MiBytes) using the submitted version of the client (from part 1)
+1. (5 pts) Server prints the correct value for the received data from the previous test
+1. (5 pts) Server successfully receives a large amount of data (~10 MiBytes) using the instructor's version of the client (without emulated delays and/or transmission errors)
+1. (5 pts) Server prints the correct value for the received data from the previous test
+1. (5 pts) Server successfully receives a large amount of data (~10 MiBytes) using the instructor's version of the client (**with** emulated delays and/or transmission errors)
+1. (5 pts) Server prints the correct value for the received data from the previous test
+
+
+Note that you may receive deductions if your repository contains temporary files or your submission is lacking the required README file.
