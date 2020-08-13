@@ -73,3 +73,21 @@ course_info:
     - deadline: Week 5
     - deadline: Week 8
     - deadline: Week 15
+
+assets:
+  sources:
+    - _assets/css
+    - _assets/images
+    - _assets/fonts
+    - _assets/js
+    - _assets/bower
+    - _assets/misc
+
+  plugins:
+    css:
+      autoprefixer:
+        browsers:
+          - "last 2 versions"
+          - "IE > 9"
+
+    img: { optim: {}, magick: {} }
