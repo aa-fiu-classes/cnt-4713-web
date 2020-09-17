@@ -102,14 +102,10 @@ Maximum points: 100
 1. (5 pts) When server receives 10 connections simultaneously, it accepts and process them sequentially without rejecting
 1. (5 pts) Server aborts connection and prints ERROR when it does not receive data from client for more than 10 seconds.
 1. (5 pts) Server accepts another connection after the first connection timed out
-1. (5 pts) Server successfully receives a small amount of data (~500 bytes) using the submitted version of the client (from part 1)
-1. (5 pts) Server prints the correct value for the received data from the previous test
-1. (5 pts) Server successfully receives a small amount of data (~500 bytes) using the instructor's version of the client
-1. (5 pts) Server prints the correct value for the received data from the previous test
-1. (5 pts) Server successfully receives a large amount of data (~10 MiBytes) using the submitted version of the client (from part 1)
-1. (5 pts) Server prints the correct value for the received data from the previous test
-1. (5 pts) Server successfully receives a large amount of data (~10 MiBytes) using the instructor's version of the client (without emulated delays and/or transmission errors)
-1. (5 pts) Server prints the correct value for the received data from the previous test
+1. (10 pts) Server successfully receives a small amount of data (~500 bytes) using the instructor's version of the client
+1. (10 pts) Server prints the correct value for the received data from the previous test
+1. (10 pts) Server successfully receives a large amount of data (~10 MiBytes) using the instructor's version of the client (without emulated delays and/or transmission errors)
+1. (10 pts) Server prints the correct value for the received data from the previous test
 1. (5 pts) Server successfully receives a large amount of data (~10 MiBytes) using the instructor's version of the client (**with** emulated delays and/or transmission errors)
 1. (5 pts) Server prints the correct value for the received data from the previous test
 

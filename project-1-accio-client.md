@@ -39,6 +39,7 @@ For example, the command below should result in connection to a server on the sa
 - Client should handle connection and transmission errors.  The reaction to network or server errors should be **no longer that 10 seconds**:
 
     * Timeout to connect to server should be no longer than `10 seconds`
+    * Timeout for not being able to receive the command from server within `10 seconds`.
     * Timeout for not being able to send more data to server (not being able to write to send buffer) should be no longer than `10 seconds`.
 
     Whenever timeout occurs, the client should abort the connection, print an error string starting with `ERROR:` to standard error (using `sys.stderr.write()`), and exit with non-zero code.
