@@ -92,12 +92,11 @@ Maximum points: 100
 1. (5 pts) Server correctly saves the file from the previous test
 1. (5 pts) Server successfully receives a small file (~500 bytes) using the instructor's version of the client
 1. (5 pts) Server correctly saves the file from the previous test
-1. (5 pts) Server successfully receives 10 large files (~10 MiBytes) using the submitted version of the client (from part 1)
-1. (5 pts) Server correctly saves all the files from the previous test in `1.file`, `2.file`, ... `10.file`
-1. (5 pts) Server successfully receives 10 large files (~10 MiBytes) using the instructor's version of the client (without emulated delays and/or transmission errors)
-1. (5 pts) Server correctly saves all the files from the previous test in `1.file`, `2.file`, ... `10.file`
-1. (5 pts) Server successfully receives 10 large files (~10 MiBytes) using the instructor's version of the client (**with** emulated delays and/or transmission errors)
-1. (5 pts) Server correctly saves all the files from the previous test in `1.file`, `2.file`, ... `10.file`
-
+1. (5 pts) Server successfully receives sequentially 10 large files (~10 MiBytes) using the submitted version of the client (from part 1) and saves all the files from the previous test in `1.file`, `2.file`, ... `10.file`
+1. (5 pts) Same as previous but in parallel
+1. (5 pts) Server successfully receives sequentially 10 large files (~10 MiBytes) using the instructor's version of the client (from part 1) and saves all the files from the previous test in `1.file`, `2.file`, ... `10.file`
+1. (5 pts) Same as previous but in parallel
+1. (5 pts) Server successfully receives sequentially 10 large files (~10 MiBytes) using the instructor's version of the client (from part 1) and saves all the files from the previous test in `1.file`, `2.file`, ... `10.file` (**with** emulated delays and/or transmission errors)
+1. (5 pts) Same as previous but in parallel
 
 Note that you may receive deductions if your repository contains temporary files or your submission is lacking the required README file.
