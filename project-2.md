@@ -30,12 +30,9 @@ You are encouraged to host your code in private repositories on [GitHub](https:/
 
 ## Task Description
 
-The project contains two parts: a server and a client.
+The project includes implementation of a confundo client.  The client opens UDP socket, implements outgoing connection management, and connects to the server.  Once connection is established, it sends the content of a file to the server.
 
-- The client opens UDP socket, implements outgoing connection management, and connects to the server.  Once connection is established, it sends the content of a file to the server.
-- (extra credit) The server opens UDP socket and implements incoming connection management from clients.  For each of the connection, the server saves all the received data from the client in a file.  An online version of the server will be provided to test your client.
-
-Both client (and server) must implement reliable data transfer using unreliable UDP transport, including data sequencing, cumulative acknowledgements, and basic version of the congestion control.
+Client must implement reliable data transfer using unreliable UDP transport, including data sequencing, cumulative acknowledgements, and basic version of the congestion control.
 
 ### Confundo Protocol Specification
 
@@ -168,73 +165,6 @@ For example, the command below should result in connection to a server on the sa
 
 - Whenever client receives no packets from server for more than `10 seconds`, it should abort the connection (close socket and exit with non-zero code)
 
-### (Extra credit) Server Application Specification
-
-The server application MUST be written in `server.py` file (you can create additional `.py` files and modules), accepting two command-line arguments:
-
-    $ python3 ./server.py <PORT> <FILE-DIR>
-
-- `<PORT>`: port number on which server will "listen" on connections (expects UDP packets to be received).  The server must accept connections coming from any interface.
-- `<FILE-DIR>`: directory name where to save the received files.
-
-For example, the command below should start the server listening on port `5000` and saving received files in the directory `/save`.
-
-    $ python3 ./server.py 5000 /save
-
-**Requirements**
-
-- The server must open a UDP socket on the specified port number
-
-- The server should gracefully process incorrect port number and exit with a non-zero error code (you can assume that the folder is always correct).  In addition to exit, the server must print out on standard error (using `sys.stderr.write()`) an error message that starts with `ERROR:` string.
-
-- The server should exit with code zero when receiving `SIGQUIT`/`SIGTERM` signal
-
-- The server must count all established connections (1 for the first connect, 2 for the second, etc.).  The received file over the connection must be saved to `<FILE-DIR>/<CONNECTION-ID>.file` file  (e.g., `/save/1.file`, `/save/2.file`, etc.).  If the client doesn't send any data during gracefully terminated connection, the server should create an empty file with the name that corresponds to the connection number.
-
-- The server should be able to accept and process multiple connection from clients at the same time
-
-   * After receiving packet with `SYN` flag, the server should create state for the `connection ID` and proceed with 3-way handshake for this connection.  Server should use `4321` as initial sequence number.
-
-   * After receiving packet without `SYN` flag, the server should lookup the connection using `connection ID` and proceed with appropriate action for the connection.
-
-              Client1                                  Server
-                |                                        |
-                |      seq=42, ack=0, id=0, SYN          |
-                | -------------------------------------> |
-                |   seq=4321, ack=43, id=1, SYN, ACK     |
-                | <------------------------------------- |
-                |                                        |
-                |                                        |
-                |    seq=43, ack=4322, id=1, ACK         |
-                | -------------------------------------> |
-                |       (if no payload included)         |
-                |                                        |
-               ...                                      ...
-                |                                        |                                  Client2
-                |                                        |                                     |
-                |                                        |     seq=42, ack=0, id=0, SYN        |
-                |                                        | <---------------------------------- |
-                |                                        | sec=4321, ack=43, id=2, SYN, ACK    |
-                |                                        | ----------------------------------> |
-                |                                        |                                     |
-                |                                        |   seq=43, ack=4322, id=2, ACK       |
-                |                                        | <---------------------------------- |
-                |                                        |    (if includes 512-byte payload)   |
-                |                                        |                                     |
-                |                                        |   sec=4322, ack=555, id=2, ACK      |
-                |                                        | ----------------------------------> |
-                |                                       ...                                   ...
-                |                                        |       seq=555, ack=0, id=2          |
-                |                                        | <---------------------------------- |
-                |                                        |   sec=4322, ack=1067, id=2, ACK     |
-                |                                        | ----------------------------------> |
-                |                                       ...                                   ...
-                |                                        |                                     |
-
-- The server must assume an error if no data is received from the client for over 10 seconds.  It should abort the connection and write a single `ERROR` string into the corresponding file.
-
-- The server should be able to accept and save files up to 100 MiB.  **This requirement in no way implies that your client should not support larger files! It just ensures to ensure that you considered large files that may not fit in RAM.**
-
 ### Congestion Control Requirements
 
 Client and server (mostly client) is required to implement TCP Tahoe congestion window maintenance logic (without 3-dup ACK loss detection):
@@ -251,7 +181,7 @@ Client and server (mostly client) is required to implement TCP Tahoe congestion 
 
 - For each valid packet of the connection (except packets with only `ACK` flag and empty payload), the server responds with an `ACK` packet, which includes the next expected in-sequence byte to receive (cumulative acknowledgement).
 
-### Common Requirements
+### Misc Requirements
 
 - The following output MUST be written to the standard output (using `print()`) in the **exact format defined**.  You will get no credit if the format is not followed exactly and our test script cannot automatically parse it.  If any other information needs to be shown, it MUST be written to the standard error (using `sys.stderr.write()`)
 
@@ -262,6 +192,11 @@ Client and server (mostly client) is required to implement TCP Tahoe congestion 
     - `[xx]` means that `xx` value is optional
     - `"xx"` means `xx` string should appear on the output
     - `<yy>` means that value of `yy` variable should appear on the output
+
+    For example:
+
+            RECV 4322 22347 3 1024 512 ACK
+            RECV 4322 0 3 1024 512 FIN
 
   * If received packet is dropped (e.g., unknown `connection ID`):
 
@@ -494,42 +429,3 @@ We may test your server against a "standard" implementation of the client, your 
     2.13. (10 pts, private) Client successfully transmits a small file over a lossy link with delay
 
     2.14. (10 pts, private) Client successfully transmits a large file over a lossy link with delay
-
-
-#### Extra credits (by request only)
-
-1. Code structure
-
-    - Well organized code, with abstraction for Connection, data stream(s), etc.
-
-2. Server checks
-
-    3.1. () Server responses with SYN-ACK packet with correct connection ID
-
-    3.2. () Server has correct initial values for CWND, SS-THRESH, and Sequence Number
-
-    3.3. () Server responds with ACK packets, which include the next expected in-sequence byte to receive (cumulative ACK)
-
-    3.4. () Server able to receive a large file (10 MiB bytes) and save it in 1.file without delay, loss, and reorder
-
-    3.5. () Server able to receive a large file (10 MiB bytes) and save it in 1.file over lossy and large delay network
-
-    * We will use `tc` command with reorder, gap, and delay to generate reordered and delayed packets
-    * Test need to pass under different packet delays (50 ms ~ 100 ms) and reorder rates
-    * We will not test timeout on the server side
-
-    3.6. () Server able to receive 10 small files (1 MiB bytes) in 1.file, 2.file, ..., 10.file without delay, loss, and reorder (sequentially)
-
-    3.7. () Server able to receive 10 small files (1 MiB bytes) in 1.file, 2.file, ..., 10.file without delay, loss, and reorder (in parallel)
-
-    3.8. () Server able to receive 10 small files (1 MiB bytes) in 1.file, 2.file, ..., 10.file over lossy and large delay network (sequentially)
-
-    * We will use `tc` command with loss and delay to generate the lossy and large delay network
-    * Test need to pass under different packet delays (50 ms ~ 100 ms) and packet loss rates (1% ~ 10%)
-    * We will not test timeout on the server side
-
-    3.9. () Server able to receive 10 small files (1 MiB bytes) in 1.file, 2.file, ..., 10.file over lossy and large delay network (in parallel)
-
-    * We will use `tc` command with loss and delay to generate the lossy and large delay network
-    * Test need to pass under different packet delays (50 ms ~ 100 ms) and packet loss rates (1% ~ 10%)
-    * We will not test timeout on the server side
