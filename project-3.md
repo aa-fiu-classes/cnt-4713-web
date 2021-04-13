@@ -36,6 +36,11 @@ There are four main parts in this assignment:
 - Handle IPv4 packets
 - Handle select ICMP packets
 
+These handlings needs to be implemented in the [skeleton code](https://github.com/aa-fiu-classes/fall20-project3) (see environment setup below for further details) and largely follow the logic in the following diagram:
+
+{% asset p3-flowchart.svg width="100%" %}
+
+
 This assignment runs on top of [Mininet](http://mininet.org/) which was built at Stanford.  Mininet allows you to emulate a network topology on a single machine.  It provides the needed isolation between the emulated nodes so that your router node can process and forward real Ethernet frames between the hosts like a real router.  You don't have to know how Mininet works to complete this assignment, but if you're curious, you can learn more information about Mininet on [its official website](http://mininet.org/).
 
 Your router will route real packets between emulated hosts in a single-router topology.  The project environment and the starter code has the following default topology:
