@@ -9,10 +9,6 @@ group: "Project 1"
 * toc
 {:toc}
 
-**Project specification will be published shortly**
-
-{% comment %}
-
 ## Revisions
 
 Not yet
@@ -26,7 +22,7 @@ You are allowed to resubmit any number of times.
 For full credit, you must pass all automated tests.
 
 All implementations should be written in Python [BSD sockets](http://en.wikipedia.org/wiki/Berkeley_sockets).
-**No high-level network-layer abstractions (including `sendall` function) are allowed in this project.**
+**No high-level network-layer abstractions (especially, `sendall` function) are allowed in this project.**
 You are allowed to use some high-level abstractions for parts that are not directly related to networking, such as string parsing, multi-threading.
 
 The objective of this project is to learn basic operations of BSD sockets, understand implications of using the API, as well as to discover common pitfalls when working with network operations.
@@ -63,7 +59,7 @@ You can easily create an image in your favourite virtualization engine (e.g., Vi
 
   * Clone project template
 
-        git clone https://github.com/aa-fiu-classes/fall20-project1 ~/cnt4713-proj1
+        git clone https://github.com/aa-fiu-classes/cnt4713-project1 ~/cnt4713-proj1
         cd ~/cnt4713-proj1
 
   * Initialize VM
@@ -137,5 +133,3 @@ However, if Part 1 and/or Part 2 are submitted after Part 1 and Part 2 deadlines
 - (-5 pts) The submission contains temporary or other non-source code file, except `README.md`, `Vagrantfile`, `.gitignore` and other necessary files.
 
 - (-5 pts) The submission does not contain README.md with the required content.
-
-{% endcomment %}
