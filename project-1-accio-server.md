@@ -4,6 +4,10 @@ title: "Project 1: \"Accio\" File using TCP (Server)"
 group: "Project 1"
 ---
 
+**Project specification will be published shortly**
+
+{% comment %}
+
 # Accio Server
 
 The Accio server is an extension of the simplified server that:
@@ -100,3 +104,5 @@ Maximum points: 100
 1. (5 pts) Same as previous but in parallel
 
 Note that you may receive deductions if your repository contains temporary files or your submission is lacking the required README file.
+
+{% endcomment %}

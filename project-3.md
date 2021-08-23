@@ -4,6 +4,10 @@ title: "Project 3: Build Your Own Router"
 group: "Project 3"
 ---
 
+**Project specification will be published shortly**
+
+{% comment %}
+
 
 {% asset riddikulus.jpg class="col-md-6 pull-right" style="max-width:100%" %}
 
@@ -844,3 +848,5 @@ Note that the router should work in other single-router network topologies / wit
 ## Acknowledgement
 
 This project is based on the [CS144 class project](http://web.stanford.edu/class/cs144/) by Professor Philip Levis and Professor Nick McKeown, Stanford University.
+
+{% endcomment %}

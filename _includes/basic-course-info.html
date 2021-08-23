@@ -68,8 +68,8 @@
                 <td><b>Project {{ forloop.index }}</b></td>
                 {% assign projectNo = "Project " | append: forloop.index %}
                 <td>{% for item in site.data.spreadsheets.schedule %}
-                  {% if item.projects == projectNo %}
-                    Week {{ item.week }} ({{ item.to | date: "%s" | minus: 1 | date: "%c" }} EDT)
+                  {% if item.projects contains projectNo %}
+                    Week {{ item.week }} ({{ item.to | date: "%s" | minus: 1 | date: "%c" }} EDT) ({{ item.projects }})<br/>
                   {% endif %}
                 {% endfor %}
                 </td>

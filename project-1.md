@@ -9,6 +9,9 @@ group: "Project 1"
 * toc
 {:toc}
 
+**Project specification will be published shortly**
+
+{% comment %}
 
 ## Revisions
 
@@ -134,3 +137,5 @@ However, if Part 1 and/or Part 2 are submitted after Part 1 and Part 2 deadlines
 - (-5 pts) The submission contains temporary or other non-source code file, except `README.md`, `Vagrantfile`, `.gitignore` and other necessary files.
 
 - (-5 pts) The submission does not contain README.md with the required content.
+
+{% endcomment %}

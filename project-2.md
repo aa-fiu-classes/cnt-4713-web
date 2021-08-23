@@ -7,6 +7,10 @@ group: "Project 2"
 * toc
 {:toc}
 
+**Project specification will be published shortly**
+
+{% comment %}
+
 
 **Revisions**
 
@@ -429,3 +433,5 @@ We may test your server against a "standard" implementation of the client, your 
     2.13. (10 pts, private) Client successfully transmits a small file over a lossy link with delay
 
     2.14. (10 pts, private) Client successfully transmits a large file over a lossy link with delay
+
+{% endcomment %}

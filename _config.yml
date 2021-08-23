@@ -14,13 +14,13 @@ plugins:
   - jekyll-assets
   
 url: https://users.cs.fiu.edu
-baseurl: /~afanasyev/classes/spring21/CNT-4713
+baseurl: /~afanasyev/classes/fall21/CNT-4713
 
 # Configuration for permalink
 permalink: /:title.html
 
 # Configuration for site
-title: "CNT-4713: Net Centric Computing (Computer Network Fundamentals) - Spring 2021 (FIU)"
+title: "CNT-4713: Net Centric Computing (Computer Network Fundamentals) - Fall 2021 (FIU)"
 description:
 author: Alex Afanasyev
 email:
@@ -28,7 +28,7 @@ email:
 spreadsheets:
   google_client_id: _data/google-id.json
   spreadsheet:
-    - "1397f3YaaZdahOYknY_UEXx5fxaPw85cYf2H8wS1znHw"
+    - "1FQfnYpKCGRFeqLLYRkF8yB8mHdPuHkyq63cRDFllZWE"
   
 # Configuration for navbar.html
 navbar_list:

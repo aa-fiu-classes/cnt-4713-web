@@ -4,6 +4,10 @@ title: "Project 1: \"Accio\" File using TCP (Server Simplified)"
 group: "Project 1"
 ---
 
+**Project specification will be published shortly**
+
+{% comment %}
+
 # Accio Server Simplified
 
 The simplified Accio server is another relatively simple application that waits for clients to connect, accepts a connection, sends the `accio\r\n` command, **afterwards** receives anything that client sends, counts the number of bytes received, and prints it out as a single number.
@@ -111,3 +115,5 @@ Maximum points: 100
 
 
 Note that you may receive deductions if your repository contains temporary files or your submission is lacking the required README file.
+
+{% endcomment %}
