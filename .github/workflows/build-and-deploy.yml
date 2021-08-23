@@ -1,0 +1,33 @@
+name: Build and Deploy
+
+on:
+  push:
+    branches: [ master ]
+  schedule:
+    # re-build (e.g., for program changes) twice a day
+    - cron:  '30 5,17 * * *'
+  workflow_dispatch:
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    
+    - name: Build
+      run: |
+        docker run \
+        -v ${{ github.workspace }}:/srv/jekyll -v ${{ github.workspace }}/_site:/srv/jekyll/_site \
+        jekyll/builder:latest /bin/bash -c "chmod -R 777 /srv/jekyll && jekyll build --future"
+
+    - name: Deploy
+      uses: easingthemes/ssh-deploy@v2.2.11
+      env:
+        SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+        ARGS: "-rltgoDzvO"
+        SOURCE: "${{ github.workspace }}/_site"
+        REMOTE_HOST: ${{ secrets.SSH_HOSTNAME }}
+        REMOTE_USER: ${{ secrets.SSH_USERNAME }}
+        TARGET: "www/classes/fall21/CNT-4713/"
