@@ -9,23 +9,22 @@ group: "Project 2"
 
 **Project specification will be published shortly**
 
-{% comment %}
-
-
 **Revisions**
 
 Not yet
 
 ## Overview
 
-In this project you will need to implement `Confundo`, a basic version of reliable data transfer protocol, including connection establishment and congestion control.
+In this project you will need to implement `Confundo`, a basic version of reliable data transfer protocol, including basics of connection establishment and congestion control.
 You will implement Confundo protocol in context of server and client applications, where client transmits a file as soon as the connection is established (same as in project 1).
 
 All implementations should be written in Python [BSD sockets](http://en.wikipedia.org/wiki/Berkeley_sockets).
 **No high-level network-layer abstractions are allowed in this project.**
-You are allowed to use some high-level abstractions for parts that are not directly related to networking, such as string parsing, multi-threading.
+You are allowed to use some high-level abstractions for parts that are not directly related to networking, such as string parsing.
 
-The objective of this project is to deepen your understanding on how TCP protocol works and specifically how it handles packet losses and reordering.
+For simplicity, we will **NOT** use any multi threading or parallelism in project 2.  Just a single connection at a time.
+
+The objective of this project is to deepen your understanding on how TCP protocol works and specifically how sequence number operate, how retransmissions happen, and specifics of congestion control advancement.
 
 You are required to use `git` to track the progress of your work. **The project can receive a full grade only if the submission includes git history no shorter than 3 commits FROM ALL PARTICIPANTS OF YOUR GROUP.**  If commit history includes commits made only by one group member, other group members will receive **no credit**.
 
@@ -34,9 +33,19 @@ You are encouraged to host your code in private repositories on [GitHub](https:/
 
 ## Task Description
 
-The project includes implementation of a confundo client.  The client opens UDP socket, implements outgoing connection management, and connects to the server.  Once connection is established, it sends the content of a file to the server.
+The project includes implementation of a new Confundo Socket, which is API compatible with regular TCP socket, but implements everything on top of UDP protocol, according to the defined specification.
+There is a lot of implementation in the skeleton code, and the minimal base implementation can be done by just meaningfully updating the marked pieces in `confundo/socket.py` code.  You do not have to follow the exact logic there and are free to completely rewrite the code.
 
-Client must implement reliable data transfer using unreliable UDP transport, including data sequencing, cumulative acknowledgements, and basic version of the congestion control.
+You should be able to use the new Confundo.Socket in your project 1 implementation, just make sure you don't use multi threading as things will potentially "explode".
+
+The skeleton does not implement anything regarding congestion control, which is your responsibility to implement.
+
+Also, the skeleton has a very simplistic implementation of the sending logic (stop and go, sending a single segment and waiting for the ACK).
+To get max credit for the project, you would need to improve this logic.
+
+Note that it is your responsibility to update/set any constants (e.g., in `confundo/common.py`) according to the written specification.
+
+The project includes an extended skeleton code that you can find here: [https://github.com/aa-fiu-classes/fall21-project2](https://github.com/aa-fiu-classes/fall21-project2).  Additional instructions are below.
 
 ### Confundo Protocol Specification
 
@@ -76,17 +85,19 @@ Client must implement reliable data transfer using unreliable UDP transport, inc
 
 **Requirements**
 
-- The maximum UDP packet size is `524 bytes` including a header (`512 bytes` for the payload)
+- The maximum UDP packet size is `424 bytes` including a header (`412 bytes` for the payload)
 
-- The maximum sequence and acknowledgment number should be `204800` and be reset to zero whenever it reaches the maximum value.
+- MTU size for congestion control operations is 412 (payload size)
+
+- The maximum sequence and acknowledgment number should be `40000` and be reset to zero whenever it reaches the maximum value.
 
 - Packet retransmission (and appropriate congestion control actions) should be triggered when no data was acknowledged for more than `0.5 seconds` (fixed retransmission timeout).
 
-- Initial and minimum congestion window size (`CWND`) should be `1024`
+- Initial and minimum congestion window size (`CWND`) should be `412`
 
-- Initial slow-start threshold (`SS-THRESH`) should be `15000`
+- Initial slow-start threshold (`SS-THRESH`) should be `12000`
 
-- Initial sequence number should be `42`
+- Initial sequence number should be `77`
 
 - If `ACK` field is not set, `Acknowledgment Number` field should be set to 0
 
@@ -165,7 +176,7 @@ For example, the command below should result in connection to a server on the sa
                   close
                 connection
 
-- Client should support transfer of files that are up to `100 MiB`. **This requirement in no way implies that your client should not support larger files! It just ensures to ensure that you considered large files that may not fit in RAM.**
+- Client should support transfer of large files that do not fit into RAM, i.e., you cannot read file into memory and send it or receive all in memory and then write.
 
 - Whenever client receives no packets from server for more than `10 seconds`, it should abort the connection (close socket and exit with non-zero code)
 
@@ -177,11 +188,11 @@ Client and server (mostly client) is required to implement TCP Tahoe congestion 
 
 - After each `ACK` is received
 
-  * (*Slow start*) If `CWND < SS-THRESH`: `CWND` += 512
+  * (*Slow start*) If `CWND < SS-THRESH`: `CWND` += 412
 
-  * (*Congestion Avoidance*) If `CWND >= SS-THRESH`: `CWND` += (512 * 512) / CWND
+  * (*Congestion Avoidance*) If `CWND >= SS-THRESH`: `CWND` += (412 * 412) / CWND
 
-- After timeout, set `SS-THRESH -> CWND / 2`, `CWND -> 1024`, and retransmit data after the last acknowledged byte.
+- After timeout, set `SS-THRESH -> CWND / 2`, `CWND -> 412`, and retransmit data after the last acknowledged byte.
 
 - For each valid packet of the connection (except packets with only `ACK` flag and empty payload), the server responds with an `ACK` packet, which includes the next expected in-sequence byte to receive (cumulative acknowledgement).
 
@@ -215,16 +226,21 @@ Client and server (mostly client) is required to implement TCP Tahoe congestion 
 
 The best way to approach this project is in incremental steps.  Do not try to implement all of the functionality at once.
 
-- First, assume there is no packet loss. Just have the server send a packet, the receiver respond with an ACK,
-and so on.
+- Read and understand the skeleton code, especially the marked out areas.  The skeleton code will NOT work (has syntax errors) until those areas are corrected.
 
-- Second, introduce a large file transmission. This means you must divide the file into multiple packets and transmit the packets based on the current congestion window size.
+- Do initial implementation regarding the marked out areas and test it with the provided remote server.
 
-- Third, introduce packet loss.  Now you have to add a timer at the first sent and unacked packet. There should be one timeout whenever data segments are sent out. Also congestion control features should be implemented for the successful file transmission.
+- Adopt a version of your project 1 server to work with Confundo Socket and do local testing.
+
+- Add necessary "DROP" and "DUP" statements, as these are not in the skeleton.
+
+After these are done, move to more complex steps:
+
+- Add congestion control logic
+
+- Extend stop-an-go to a more efficient sending/ack/retx logic.
 
 ### Submission Hints
-
-**For those struggling with Test Failed: Client exit code is not zero (-9, stderr: ) or similar** (Credits to James Wang)
 
 Checklist:
 
@@ -394,23 +410,19 @@ We may test your server against a "standard" implementation of the client, your 
 
 ### Grading Criteria
 
-1. Miscellaneous tests (10pts)
+Tests are subject to changes
 
-    1.1  (2.5 pts, will be deducted manually if violates) At least 3 git commits (at least one from each group member): MUST include copy of `git log --pretty=format:"%h%x09%an%x09%ad%x09%s"`
+1. Miscellaneous tests
 
-    1.2. (2.5 pts, public) Client handles incorrect hostname (non-existing hostname)
+    1.1  (2.5 pts, public) At least 3 git commits (at least one from each group member): MUST include copy of `git log --pretty=format:"%h%x09%an%x09%ad%x09%s"`
 
-    1.3. (2.5 pts, public) Client handles incorrect port (negative, exceeding range, invalid service name)
+2. Client tests
 
-    1.4. (2.5 pts) free credit <del>(2.5 pts, public) Server handles incorrect port number (negative, exceeding range, non-number, invalid service name)</del>
+    2.1. (5 pts, public) Client sends SYN packet with correct values in its header
 
-2. Client tests (90pts)
+    2.2. (5 pts, public) Client has correct initial values Sequence Number
 
-    2.1. (5 pts, public) Client initiates three-way handshake by sending a SYN packet with correct values in its header
-
-    2.2. (5 pts, public) Client has correct initial values for CWND, SS-THRESH, and Sequence Number
-
-    2.3. (5 pts, public) Data segments that client sends are not exceeding 512 bytes and on average larger than 500 bytes (for 1~MByte file)
+    2.3. (5 pts, public) Data segments that client sends are not exceeding 412 bytes and on average larger than 370 bytes (for 1~MByte file)
 
     2.4. (5 pts, public) Client should reset its sequence number to zero when the sequence number reaches the maximum value (2.5pts if wraps, 2.5pts if wraps correctly)
 
@@ -418,20 +430,21 @@ We may test your server against a "standard" implementation of the client, your 
 
     2.6. (5 pts, public) After finishing connection, client responds with ACK for incoming FINs for 2 seconds, dropping packets for this connection afterwards
 
-    2.7. (10 pts, private) Client successfully transmits a small file
+    2.7. (10 pts, public) Client successfully transmits a small file
 
-    2.8. (5 pts, private) Client aborts the connection if no incoming packets for more than 10 seconds
+    2.8. (5 pts, public) Client aborts the connection if no incoming packets for more than 10 seconds
 
-    2.9. (5 pts, public) Client properly increases congestion window size in slow start phase
+    2.9. (5 pts, public) Client has correct initial values for CWND, SS-THRESH
 
-    2.10. (5 pts, private) Client properly increases congestion window size in congestion avoidance phase
+    2.10. (5 pts, public) Client properly increases congestion window size in slow start phase
 
-    2.11. (10 pts, public) Client detects and retransmits lost data segments
+    2.11. (5 pts, public) Client properly increases congestion window size in congestion avoidance phase
 
-    2.12. (5 pts, private) Client sets SS-THRESH and CWND values properly after timeout
+    2.12. (10 pts, public) Client detects and retransmits lost data segments
 
-    2.13. (10 pts, private) Client successfully transmits a small file over a lossy link with delay
+    2.13. (5 pts, public) Client sets SS-THRESH and CWND values properly after timeout
 
-    2.14. (10 pts, private) Client successfully transmits a large file over a lossy link with delay
+    2.14. (10 pts, public) Client successfully transmits a small file over a lossy link with delay
 
-{% endcomment %}
+    2.15. (10 pts, public) Client successfully transmits a large file over a lossy link with delay
+
