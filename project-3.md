@@ -37,7 +37,7 @@ There are four main parts in this assignment:
 - Handle IPv4 packets
 - Handle select ICMP packets
 
-These handlings needs to be implemented in the [skeleton code](https://github.com/aa-fiu-classes/fall20-project3) (see environment setup below for further details) and largely follow the logic in the following diagram:
+These handlings needs to be implemented in the [skeleton code](https://github.com/aa-fiu-classes/fall21-project3) (see environment setup below for further details) and largely follow the logic in the following diagram:
 
 {% asset p3-flowchart.svg width="100%" %}
 
@@ -539,7 +539,7 @@ For this project you should use the provided Vagrant environment, as it installs
 1. Clone project template
 
     ```bash
-    git clone https://github.com/aa-fiu-classes/fall20-project3 ~/cnt4713-proj3
+    git clone https://github.com/aa-fiu-classes/fall21-project3 ~/cnt4713-proj3
     cd ~/cnt4713-proj3
     ```
 
