@@ -257,7 +257,7 @@ This error is especially baffling because it can sometimes occur for some test c
 
 ### Emulating packet loss
 
-If are using the [Vagrantfile provided in project-2 skeleton](https://github.com/aa-fiu-classes/fall20-project2), you can automatically instantiate two virtual machines that are connected to each other using a private network (`eth1` interface on each).  You can also run preinstalled `/set-loss.sh` script to enable emulation of 10% loss and delay of 20ms in each direction (need to run on each VM separately).
+If are using the [Vagrantfile provided in project-2 skeleton](https://github.com/aa-fiu-classes/fall21-project2), you can automatically instantiate two virtual machines that are connected to each other using a private network (`eth1` interface on each).  You can also run preinstalled `/set-loss.sh` script to enable emulation of 10% loss and delay of 20ms in each direction (need to run on each VM separately).
 
 You can use the following commands to adjust parameters of the emulation:
 
@@ -306,7 +306,7 @@ You can easily create an image in your favourite virtualization engine (VirtualB
 
   * Clone project template
 
-        git clone https://github.com/aa-fiu-classes/fall20-project2 ~/cnt4713-proj2
+        git clone https://github.com/aa-fiu-classes/fall21-project2 ~/cnt4713-proj2
         cd ~/cnt4713-proj2
 
   * Initialize VMs, one to run the client app and the other to run the server app
