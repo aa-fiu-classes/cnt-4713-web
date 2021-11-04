@@ -123,7 +123,7 @@ For example, the command below should result in connection to a server on the sa
 
 - The client must open a UDP socket and initiate 3-way handshake to the specified hostname/ip and port
 
-  * Send UDP packet `src-ip=DEFAULT, src-port=DEFAULT, dst-ip=HOSTNAME-OR-IP, dst-port=PORT` with `SYN` flag set, `Connection ID` initialized to `0`, `Sequence Number` set to `42`, and `Acknowledgement Number` set to `0`
+  * Send UDP packet `src-ip=DEFAULT, src-port=DEFAULT, dst-ip=HOSTNAME-OR-IP, dst-port=PORT` with `SYN` flag set, `Connection ID` initialized to `0`, `Sequence Number` set to `77`, and `Acknowledgement Number` set to `0`
 
   * Expect response from server with `SYN | ACK` flags.  The client must record the returned `Connection ID` and use it in all subsequent packets.
 
