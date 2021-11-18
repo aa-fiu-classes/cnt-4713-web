@@ -4,8 +4,6 @@ title: "Project 3: Build Your Own Router"
 group: "Project 3"
 ---
 
-**Project specification will be published shortly**
-
 {% asset riddikulus.jpg class="col-md-6 pull-right" style="max-width:100%" %}
 
 * toc
