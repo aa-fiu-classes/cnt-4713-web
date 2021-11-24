@@ -11,7 +11,7 @@ group: "Project 3"
 
 **Revisions**
 
-Not yet
+November 24, 2021: Reduced requirements for full credit and extra credit.
 
 ## Overview
 
@@ -793,6 +793,33 @@ Submissions that do not follow these requirements will not get any credit.
 ## Grading
 
 ### Grading Criteria
+
+To get full credit, you will need to implement a limited functionality router, which just acts as a host:
+
+1. (10 pts) Correct ARP response for requests from client, server1, and server2
+
+2. (10 pts) Pings from client to all router's IP addresses
+
+3. (10 pts) Pings from server1 to all router's IP addresses
+
+4. (10 pts) Pings from server2 to all router's IP addresses
+
+5. (10 pts) Ping responses have proper TTLs
+
+6. (10 pts) Pings from client, server1, and servers2 with **incorrect** IPv4 checksum are discarded
+
+7. (10 pts) Only proper ARP requests are responded (e.g., on interface sw0-eth3 respond to ARP requests only for IP 10.1.1.1)
+
+8. (10 pts) Traceroute from client to all router's IP addresses
+
+9. (10 pts) Traceroute from server1 to all router's IP addresses
+
+10. (10 pts) Traceroute from server2 to all router's IP addresses
+
+
+### Extra Credit Grading Criteria
+
+If you implement a full router, then you can submit for extra credits. You will get a proportional percentage of the extra credit, max 2% of the course grade (subject to adjustments).
 
 Note that test cases and points are subject adjustments.
 
