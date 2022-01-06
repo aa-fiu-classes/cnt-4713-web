@@ -33,6 +33,8 @@ You should not commit any temporary files in your repository, otherwise points w
 Note: You are encouraged to host your code in private repositories on [GitHub](https://github.com/).  At the same time, you are PROHIBITED to make your code for the class project public during the class or any time after the class.  If you do so, you will be violating academic honestly policy that you have signed, as well as the student code of conduct and be subject to serious sanctions.
 {: class="alert alert-warning"}
 
+**DO NOT open files in "text" mode.  All the code you write should directly work with buffer and buffer strings like `b"foobar-I-am-a-buffer-string"`.  Nowhere in your program you should use `.decode('utf-8')` or `.encode('utf-8')`. If you do, you probably not going to pass many of the tests**
+
 ## Tasks Description
 
 The project is split into three progressive parts with their individual deadlines:
@@ -50,6 +52,8 @@ You can easily create an image in your favourite virtualization engine (e.g., Vi
 ### Set Up Vagrant and Create VM Instance
 
 **Note that all example commands are executed on the host machine (your laptop), e.g., in `Terminal.app` (or `iTerm2.app`) on macOS, `cmd` in Windows, and `console` or `xterm` on Linux.  After the last step (`vagrant ssh`) you will get inside the virtual machine and can compile your code there.**
+
+**If you are using non-Intel Macbooks, then you may need to opt for alternative virtualization systems, as VirtualBox is known not to work there.**
 
 - Download and install your favourite virtualization engine, e.g., [VirtualBox](https://www.virtualbox.org/wiki/Downloads)
 

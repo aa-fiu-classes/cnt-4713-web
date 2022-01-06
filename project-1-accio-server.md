@@ -8,7 +8,7 @@ group: "Project 1"
 
 The Accio server is an extension of the simplified server that:
 - processes multiple simultaneous connections in parallel
-- saves the received data into the specified folder.  Note that server should NOT use the suggested name in the received headers; rather use the name defined in the specification!
+- saves the received data into the specified folder. Note that filenames should strictly follow what defined in the spec: `1.file`, `2.file`, etc.  DO NOT invent any other mechanism that is not explicitly defined in the spec or you will fail the tests.
 
 ## Revisions
 
@@ -26,6 +26,8 @@ The server application MUST be implemented in `server.py` Python file, accepting
 For example, the command below should start the server listening on port `5000` and saving received files in the directory `/save`.
 
     $ python3 server.py 5000 /save
+
+**DO NOT open files in "text" mode.  All the code you write should directly work with buffer and buffer strings like `b"foobar-I-am-a-buffer-string"`.  Nowhere in your program you should use `.decode('utf-8')` or `.encode('utf-8')`. If you do, you probably not going to pass many of the tests**
 
 **Requirements**:
 

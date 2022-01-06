@@ -6,7 +6,7 @@ group: "Project 1"
 
 # Accio Server Simplified
 
-The simplified Accio server is another relatively simple application that waits for clients to connect, accepts a connection, sends the `accio\r\n` command, **afterwards** receives headers, and then receives binary file that client sends, counts the number of bytes received, and prints it out as a single number (number of bytes received not including the header size).
+The simplified Accio server is another relatively simple application that waits for clients to connect, accepts a connection, sends the `accio\r\n` command, **afterwards** receives confirmation, sends the `accio\r\n` command again, receives the second confirmation, and then receives binary file that client sends, counts the number of bytes received, and prints it out as a single number (number of bytes received not including the header size).
 
 ## Revisions
 
@@ -24,6 +24,8 @@ For example, the command below should start the server listening on port `5000`.
 
     $ python3 server.py 5000
 
+**DO NOT open files in "text" mode.  All the code you write should directly work with buffer and buffer strings like `b"foobar-I-am-a-buffer-string"`.  Nowhere in your program you should use `.decode('utf-8')` or `.encode('utf-8')`. If you do, you probably not going to pass many of the tests**
+
 **Requirements**:
 
 - The server must open a listening socket on the specified in the command line port number on all interfaces. In order to do that, you should hard-code `0.0.0.0` as a host/IP in `socket.bind` method.
@@ -34,13 +36,13 @@ For example, the command below should start the server listening on port `5000`.
 
 - The server should be able to accept multiple connections sequentially (i.e., accept one connection, process it, close connection; accept another one, etc.)
 
-- The server should be able to handle up toe 10 simultaneous connections in a graceful fashion: not rejecting next connection, but processing it as soon as done with the previous one
+- The server should be able to handle up toe 10 simultaneous connections in a graceful fashion: not rejecting next connection, but processing it as soon as done with the previous one.  To fullfil this requirement, you don't need to use multithreading, just the correct parameter to `socket.listen` call.
 
-  * To test, you can `telnet` to your server from multiple consoles.  None should be rejected, but only one should display `accio` command at a time.  As soon as you done with one telnet session, `accio` should appear in another console.
+  * To test, you can `telnet` to your server from multiple consoles.  None should be rejected, but only one should display `accio` command at a time.  As soon as you done with one telnet session, `accio\r\n` should appear in another console.
 
 - The server must assume an error if no data received from the client for over `10 seconds`.  It should abort the connection and write a single `ERROR` string instead of number of bytes read.
 
-- The server should be able to accept large enough files (`100 MiB` or more)
+- The server should be able to accept large enough files (`100 MiB` or more) that do not fit in memory (so, you cannot receive all in memory and then calculate the length, you should calculate the length as you receive).
 
 ## Approach to implement
 
@@ -67,7 +69,7 @@ For example, the command below should start the server listening on port `5000`.
 
 - Add routines to send `accio\r\n` after connection established
 
-    * To test, use telnet again.  You should see `accio` appearing after you connected to the server.
+    * To test, use telnet again.  You should see `accio\r\n` appearing after you connected to the server.
 
 - Add routines to receive data from the client and count the amount of data received
 

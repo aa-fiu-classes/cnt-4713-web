@@ -89,7 +89,7 @@ The project includes an extended skeleton code that you can find here: [https://
 
 - MTU size for congestion control operations is 412 (payload size)
 
-- The maximum sequence and acknowledgment number should be `40000` and be reset to zero whenever it reaches the maximum value.
+- The maximum sequence and acknowledgment number should be `50000` and be reset to zero whenever it reaches the maximum value.
 
 - Packet retransmission (and appropriate congestion control actions) should be triggered when no data was acknowledged for more than `0.5 seconds` (fixed retransmission timeout).
 
@@ -97,7 +97,7 @@ The project includes an extended skeleton code that you can find here: [https://
 
 - Initial slow-start threshold (`SS-THRESH`) should be `12000`
 
-- Initial sequence number should be `77`
+- Initial sequence number should be `50000`
 
 - If `ACK` field is not set, `Acknowledgment Number` field should be set to 0
 

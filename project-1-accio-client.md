@@ -6,15 +6,17 @@ group: "Project 1"
 
 # Accio Client
 
-Accio client is a relatively simple application that connects to a server, expects to receive `accio` command from the server, and sends the following in the exact order:
+Accio client is a relatively simple application that connects to a server, expects to receive `accio\r\n` sequence from the server, sends the following
 
-    Content-Disposition: attachment; filename="<actual-or-suggested-filename-without-brackets>"\r\n
-    Content-Type: application/octet-stream\r\n
-    Content-Length: <actual-file-size>\r\n
+    confirm-accio\r\n
+
+Then expects to receive `accio\r\n` again, sends the following
+
+    confirm-accio-again\r\n
     \r\n
 
 Following with the **binary** content of a file.
-All of these must be sent out ONLY AFTER receiving `acio` command from the server.
+All of these must be sent out ONLY AFTER receiving **second** `accio\r\n` command from the server.
 
 Please note, that you must assume the input files are BINARY, i.e., when opening use `"rb"` option.
 Do NOT attempt to convert binary to Python3 UTF-8 strings, but just directly use binary.
@@ -40,9 +42,9 @@ For example, the command below should result in connection to a server on the sa
 
 **Requirements**:
 
-- The client must be able to connect to the specified server and port, receive `accio\r\n` command from the server, send correct headers to the server, then transfer the specified file, and gracefully terminate the connection.
+- The client must be able to connect to the specified server and port, receive two `accio\r\n` commands from the server, send correct confirmations to the server, then transfer the specified file, and gracefully terminate the connection.
 
-- The client should not start sending anything until a full `accio\r\n` command has been received!
+- The client should not start sending anything until two full `accio\r\n` commands have been received!
 
 - The client should gracefully process incorrect hostname and port number and exit with a non-zero exit code (you can assume that the specified file is always correct).  In addition to exit, the client must print out on standard error (using `sys.stderr.write()`) an error message that starts with `ERROR:` string.
 
