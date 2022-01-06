@@ -7,8 +7,6 @@ group: "Project 2"
 * toc
 {:toc}
 
-**Project specification will be published shortly**
-
 **Revisions**
 
 Not yet
