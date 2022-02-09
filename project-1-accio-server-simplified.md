@@ -22,7 +22,7 @@ The server application MUST be implemented in `server-s.py` Python file, accepti
 
 For example, the command below should start the server listening on port `5000`.
 
-    $ python3 server.py 5000
+    $ python3 server-s.py 5000
 
 **DO NOT open files in "text" mode.  All the code you write should directly work with buffer and buffer strings like `b"foobar-I-am-a-buffer-string"`.  Nowhere in your program you should use `.decode('utf-8')` or `.encode('utf-8')`. If you do, you probably not going to pass many of the tests**
 
