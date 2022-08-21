@@ -1,6 +1,6 @@
 ---
 layout: page
-title: CNT-4713 - Fall 2021 (FIU)
+title: CNT-4713 - Fall 2022 (FIU)
 group: Home
 ---
 
