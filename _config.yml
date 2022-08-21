@@ -14,7 +14,7 @@ plugins:
   - jekyll-assets
   
 url: https://users.cs.fiu.edu
-baseurl: /~afanasyev/classes/spring22/CNT-4713
+baseurl: /~afanasyev/classes/fall22/CNT-4713
 
 # Configuration for permalink
 permalink: /:title.html
@@ -28,7 +28,7 @@ email:
 spreadsheets:
   google_client_id: _data/google-id.json
   spreadsheet:
-    - "1bPZRQTf-OJBDaVvfIL7AuPRmYIV71_zuPbqfgWBWx7k"
+    - "1eGWOiPJBGbQ_fSpyYg8sAzZs4L5My-k9tXOs3Zrz-gM"
   
 # Configuration for navbar.html
 navbar_list:
