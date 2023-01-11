@@ -30,4 +30,4 @@ jobs:
         SOURCE: "_site/"
         REMOTE_HOST: ${{ secrets.SSH_HOSTNAME }}
         REMOTE_USER: ${{ secrets.SSH_USERNAME }}
-        TARGET: "www/classes/fall22/CNT-4713/"
+        TARGET: "www/classes/spring23/CNT-4713/"

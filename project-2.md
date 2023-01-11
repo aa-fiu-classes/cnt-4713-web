@@ -9,7 +9,7 @@ group: "Project 2"
 
 **Revisions**
 
-March 18, 2022: Clarify that initial sequence number should be as defined in the requirements, i.e., 50000.
+None yet
 
 ## Overview
 
